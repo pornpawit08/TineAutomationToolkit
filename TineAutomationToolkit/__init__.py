@@ -2,7 +2,12 @@
 from TineAutomationToolkit.keywords import *
 
 
-class TineAutomationToolkit(ToolkitsTest):
+class TineAutomationToolkit(
+    ToolkitsTest,
+    WaitingElement,
+    ConnectionManagement,
+    ControlElement
+    ):
 
     def __init__(self):
         pass
