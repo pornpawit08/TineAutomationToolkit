@@ -56,6 +56,13 @@ class ControlElement:
 
         | Get Element Attribute | locator | name |
         | Get Element Attribute | locator | value |
+
+        ใช้การดึงข้อมูลแอตทริบิวต์ของอีเลเมนต์โดยใช้ชื่อแอตทริบิวต์: ชื่อ, ค่า, ฯลฯ
+
+        ตัวอย่าง:
+
+        | ดึงข้อมูลแอตทริบิวต์อีเลเมนต์ | ตัวระบุตำแหน่ง | ชื่อ |
+        | ดึงข้อมูลแอตทริบิวต์อีเลเมนต์ | ตัวระบุตำแหน่ง | ค่า |
         """
         elements = self._element_find_t(locator, False, True)
         ele_len = len(elements)
@@ -79,11 +86,33 @@ class ControlElement:
         | ${text} | Get Text | //*[contains(@text,'foo')] |
 
         New in AppiumLibrary 1.4.
+
+        
+        ดึงข้อความจากอีเลเมนต์ (สำหรับการใช้งานในไฮบริดและเบราว์เซอร์มือถือ ใช้ตัวระบุตำแหน่ง xpath, อื่นๆ อาจทำให้เกิดปัญหา)
+
+        ตัวอย่าง:
+
+        | ${text} | ดึงข้อความ | //*[contains(@text,'foo')] |
+
+        ใหม่ใน AppiumLibrary 1.4.
         """
         text = self._get_text(locator)
         self._info("Element '%s' text is '%s' " % (locator, text))
         return text
     
+      #Input
+    
+    def t_input_text(self, locator, text):
+        """Types the given `text` into text field identified by `locator`.
+
+        See `introduction` for details about locating elements.
+
+        พิมพ์ข้อความที่กำหนดให้ (text) ลงในช่องข้อความที่ระบุด้วย locator.
+
+        ดู introduction เพื่อดูรายละเอียดเกี่ยวกับการระบุตำแหน่งของอีเลเมนต์.
+        """
+        log._info("Typing text '%s' into text field '%s'" % (text, locator))
+        self._element_input_text_by_locator(locator, text)
     #PRIVATE_FUNCTION
         
     def _element_find_t(self, locator, first_only, required, tag=None):
@@ -122,3 +151,10 @@ class ControlElement:
         if element is not None:
             return element.text
         return None
+    
+    def _element_input_text_by_locator(self, locator, text):
+        try:
+            element = self._element_find_t(locator, True, True)
+            element.send_keys(text)
+        except Exception as e:
+            raise e

@@ -21,7 +21,15 @@ class WaitingElement:
     #KeyWord
 
     def t_wait_element_is_visible(self,locator, timeout=None, error=None):
-        """Waits until element specified with `locator` is visible."""
+        """Waits until element specified with `locator` is visible.
+
+        Wait Until Element Is Visible:
+            รอจนกว่าองค์ประกอบ (element) ที่ระบุจะปรากฏในหน้าแอพพลิเคชันและสามารถมองเห็นได้
+            ถ้าองค์ประกอบไม่ปรากฏหรือไม่สามารถมองเห็นได้ภายในระยะเวลาที่กำหนด, การทดสอบจะล้มเหลว
+            ใช้เมื่อคุณต้องการรอให้องค์ประกอบมองเห็นได้จริงก่อนที่จะดำเนินการต่อ
+
+            
+        """
 
         def check_visibility():
             visible = conelement._is_visible(locator)
@@ -47,6 +55,11 @@ class WaitingElement:
         `Wait Until Page Does Not Contain`
         `Wait Until Page Does Not Contain Element`
         and BuiltIn keyword `Wait Until Keyword Succeeds`.
+
+        Wait Until Page Contains Element:
+        รอจนกว่าองค์ประกอบ (element) ที่ระบุจะปรากฏในหน้าแอพพลิเคชัน แต่ไม่จำเป็นต้องมองเห็นได้
+        ถ้าองค์ประกอบไม่ปรากฏในหน้าภายในระยะเวลาที่กำหนด, การทดสอบจะล้มเหลว
+        ใช้เมื่อคุณต้องการรอให้องค์ประกอบมีอยู่ใน DOM ของหน้าเว็บ แต่ไม่จำเป็นต้องมองเห็นได้จริง
         """
         if not error:
             error = "Element '%s' did not appear in <TIMEOUT>" % locator

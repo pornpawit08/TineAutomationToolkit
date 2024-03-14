@@ -17,6 +17,9 @@ class Scroll:
         Scrolls from one element to another
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
+        
+        เลื่อนจากอีเลเมนต์หนึ่งไปยังอีเลเมนต์อื่น
+        คุณสมบัติหลักสำหรับอีเลเมนต์ทั่วไปคือ id และ name ดู introduction เพื่อดูรายละเอียดเกี่ยวกับการระบุตำแหน่งของอีเลเมนต์
         """
         el1 = conelement._element_find_t(start_locator, True, True)
         el2 = conelement._element_find_t(end_locator, True, True)
@@ -39,6 +42,18 @@ class Scroll:
 
         _*NOTE: *_
         Android 'Swipe' is not working properly, use ``offset_x`` and ``offset_y`` as if these are destination points.
+
+        สไลด์จากจุดหนึ่งไปยังจุดอื่นๆ สำหรับระยะเวลาที่เลือกได้
+
+        อาร์กิวเมนต์:
+
+        start_x - ค่า x-coordinate ที่จะเริ่มต้น
+        start_y - ค่า y-coordinate ที่จะเริ่มต้น
+        offset_x - ระยะห่างจาก start_x ในแนว x-coordinate ที่จะหยุด
+        offset_y - ระยะห่างจาก start_y ในแนว y-coordinate ที่จะหยุด
+        duration - (ไม่จำเป็น) เวลาที่ใช้ในการสไลด์, หน่วยเป็นมิลลิวินาที
+        การใช้งาน:
+        | Swipe | 500 | 100 | 100 | 0 | 1000 |
         """
         x_start = int(start_x)
         x_offset = int(offset_x)

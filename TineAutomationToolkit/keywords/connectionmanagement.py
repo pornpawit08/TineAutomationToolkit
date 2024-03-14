@@ -21,6 +21,8 @@ class ConnectionManagement:
         """
         Puts the application in the background on the device for a certain
         duration.
+
+        วางแอปพลิเคชันไว้ในพื้นหลังของอุปกรณ์เป็นระยะเวลาหนึ่ง.
         """
         self._current_application().background_app(seconds)
         
@@ -31,6 +33,11 @@ class ConnectionManagement:
          - app_id - BundleId for iOS. Package name for Android.
 
         New in AppiumLibrary v2
+
+        
+        เปิดใช้งานแอปพลิเคชันหากมันไม่ได้รันอยู่หรือรันอยู่ในพื้นหลัง
+        อาร์กิวเมนต์:
+        - app_id - BundleId สำหรับ iOS, ชื่อแพ็คเกจสำหรับ Android.
         """
         self._current_application().activate_app(app_id)
 
@@ -42,6 +49,13 @@ class ConnectionManagement:
          - app_id - BundleId for iOS. Package name for Android.
 
         New in AppiumLibrary v2
+        
+        ยุติแอปพลิเคชันที่กำหนดไว้บนอุปกรณ์
+
+        อาร์กิวเมนต์:  
+
+        app_id - BundleId สำหรับ iOS, ชื่อแพ็คเกจสำหรับ Android.
+        ใหม่ใน AppiumLibrary เวอร์ชัน 2
         """
         return self._current_application().terminate_app(app_id)
     #PRIVATE_FUNCTION
