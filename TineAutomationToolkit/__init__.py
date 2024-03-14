@@ -6,7 +6,8 @@ class TineAutomationToolkit(
     ToolkitsTest,
     WaitingElement,
     ConnectionManagement,
-    ControlElement
+    ControlElement,
+    Scroll
     ):
 
     def __init__(self):

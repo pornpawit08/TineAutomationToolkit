@@ -6,12 +6,15 @@ import robot
 from .controlelement import ControlElement
 from AppiumLibrary.keywords._applicationmanagement import _ApplicationManagementKeywords
 
+conelement = ControlElement()
+
 class WaitingElement:
     
     def __init__(self):
-        self._ce = ControlElement
+        #เนื่องจากปัญหาเรื่องโครงสร้าง structure เลยยังไม่สามารถใช้ได้
+        # self._ce = ControlElement()
+        self._af_amk = _ApplicationManagementKeywords()
         self._timeout_in_secs = float(5)
-        self._af_amk = _ApplicationManagementKeywords
 
         
 
@@ -21,7 +24,7 @@ class WaitingElement:
         """Waits until element specified with `locator` is visible."""
 
         def check_visibility():
-            visible = self._ce._is_visible(locator)
+            visible = conelement._is_visible(locator)
             if visible:
                 return
             elif visible is None:
@@ -31,6 +34,23 @@ class WaitingElement:
         
         self._wait_until_no_error(timeout, check_visibility)
 
+    def t_wait_until_page_contains_element(self, locator, timeout=None, error=None):
+        """Waits until element specified with `locator` appears on current page.
+
+        Fails if `timeout` expires before the element appears. See
+        `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Contains`,
+        `Wait Until Page Does Not Contain`
+        `Wait Until Page Does Not Contain Element`
+        and BuiltIn keyword `Wait Until Keyword Succeeds`.
+        """
+        if not error:
+            error = "Element '%s' did not appear in <TIMEOUT>" % locator
+        self._wait_until(timeout, error, conelement._is_element_present, locator)
     
     #PRIVATE_FUNCTION
         
@@ -49,3 +69,12 @@ class WaitingElement:
                 self._af_amk.log_source()
                 raise AssertionError(timeout_error)
             time.sleep(0.2)
+
+    
+    def _wait_until(self, timeout, error, function, *args):
+        error = error.replace('<TIMEOUT>', self._format_timeout(timeout))
+
+        def wait_func():
+            return None if function(*args) else error
+
+        self._wait_until_no_error(timeout, wait_func)

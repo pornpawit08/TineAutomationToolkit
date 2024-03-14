@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from .toolkitstest import ToolkitsTest
-from .connectionmanagement import ConnectionManagement
-from .waitingelement import WaitingElement
-from .controlelement import ControlElement
+from TineAutomationToolkit.keywords.connectionmanagement import ConnectionManagement
+from TineAutomationToolkit.keywords.controlelement import ControlElement
+from TineAutomationToolkit.keywords.waitingelement import WaitingElement
+from TineAutomationToolkit.keywords.scroll import Scroll
+from TineAutomationToolkit.keywords.toolkitstest import ToolkitsTest
 
-__all__ = ['ToolkitsTest' , 'ConnectionManagement', 'WaitingElement', 'ControlElement']
+
+__all__ = ['ToolkitsTest' , 'ConnectionManagement', 'WaitingElement', 'ControlElement','Scroll']
