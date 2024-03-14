@@ -12,3 +12,6 @@ TineAutomationToolkit is a comprehensive automation toolkit designed to streamli
 # Optimize Your Mobile App Testing Workflow with TineAutomationToolkit
 
 TineAutomationToolkit is the perfect solution for developers and testers looking to optimize their mobile app testing workflow. Whether you're working with native Android or iOS apps, or utilizing the power of Flutter, this toolkit provides the tools you need to achieve efficient and effective automation testing.
+
+Cr: Deverlop from https://pypi.org/project/robotframework-appiumlibrary/
+Cr: Deverlop from https://pypi.org/project/robotframework-appiumflutterlibrary/
