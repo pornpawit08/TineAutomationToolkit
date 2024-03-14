@@ -23,7 +23,7 @@ class Scroll:
         driver = cache_app._current_application()
         driver.scroll(el1, el2)
 
-    def swipe(self, start_x, start_y, offset_x, offset_y, duration=1000):
+    def t_swipe(self, start_x, start_y, offset_x, offset_y, duration=1000):
         """
         Swipe from one point to another point, for an optional duration.
 
