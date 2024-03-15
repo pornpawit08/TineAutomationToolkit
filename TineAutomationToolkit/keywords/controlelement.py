@@ -37,8 +37,10 @@ class ControlElement:
 
         if mode == 'NATIVE_APP':
             driver.switch_to.context('NATIVE_APP')
+            print("... Status Mode : Native_app")
         if mode == 'FLUTTER':
             driver.switch_to.context('FLUTTER')
+            print("... Status Mode : Flutter")
  
         #Click_Element
     def t_click_element(self,locator):
