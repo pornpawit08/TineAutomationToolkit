@@ -7,14 +7,17 @@ from .controlelement import ControlElement
 from AppiumLibrary.keywords._applicationmanagement import _ApplicationManagementKeywords
 
 conelement = ControlElement()
+timeout_in_secs = float(5)
+af_amk = _ApplicationManagementKeywords()
 
 class WaitingElement:
     
     def __init__(self):
         #เนื่องจากปัญหาเรื่องโครงสร้าง structure เลยยังไม่สามารถใช้ได้
         # self._ce = ControlElement()
-        self._af_amk = _ApplicationManagementKeywords()
-        self._timeout_in_secs = float(5)
+        # self._af_amk = _ApplicationManagementKeywords()
+        # self._timeout_in_secs = float(5)
+        pass
 
         
 
@@ -68,18 +71,18 @@ class WaitingElement:
     #PRIVATE_FUNCTION
         
     def _format_timeout(self, timeout):
-        timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
+        timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else timeout_in_secs
         return robot.utils.secs_to_timestr(timeout)
     
     def _wait_until_no_error(self, timeout, wait_func, *args):
-        timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
+        timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else timeout_in_secs
         maxtime = time.time() + timeout
         while True:
             timeout_error = wait_func(*args)
             if not timeout_error:
                 return
             if time.time() > maxtime:
-                self._af_amk.log_source()
+                af_amk.log_source()
                 raise AssertionError(timeout_error)
             time.sleep(0.2)
 
