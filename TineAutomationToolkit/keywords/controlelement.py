@@ -29,9 +29,25 @@ class ControlElement:
         #Switch_Mode
         
     def t_switch_mode(self,mode):
-        """
-        Switch Mode ระหว่าง Flutter และ NATIVE_APP
-        จำเป็นต้อง Run ด้วย automationname : Flutter เท่านั้น
+        """The keyword is used for switching content between Native_app and Flutter
+        It is necessary to open the app using the AppiumFlutterLibrary and the automation name: Flutter.
+        
+        Example: 
+
+        | t_switch_mode   |  NATIVE_APP |  
+        
+        | t_switch_mode   |  FLUTTER |
+
+        =========================================================
+
+        คีย์เวิร์ดใช้สำหรับการสลับเนื้อหาระหว่าง Native_app กับ Flutter
+        จำเป็นต้อง OpenApp ด้วย Library: AppiumFlutterLibrary และ automationname : Flutter 
+
+        ตัวอย่างการใช้งาน: 
+
+        | t_switch_mode   |  NATIVE_APP 
+        
+        | t_switch_mode   |  FLUTTER
         """
         driver = cache_app._current_application()
 
