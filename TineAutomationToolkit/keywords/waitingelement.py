@@ -25,11 +25,30 @@ class WaitingElement:
 
     def t_wait_element_is_visible(self,locator, timeout=None, error=None):
         """Waits until element specified with `locator` is visible.
+        Fails if `timeout` expires before the element is visible. See
+        `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Contains`, `Wait Until Page Contains 
+        Element`, `Wait For Condition` and BuiltIn keyword `Wait Until Keyword
+        Succeeds`.
+
+        Example: 
+
+        | t_wait_element_is_visible | locator | timeout (defaul=20s) |
+
+        =========================================================
 
         Wait Until Element Is Visible:
-            รอจนกว่าองค์ประกอบ (element) ที่ระบุจะปรากฏในหน้าแอพพลิเคชันและสามารถมองเห็นได้
-            ถ้าองค์ประกอบไม่ปรากฏหรือไม่สามารถมองเห็นได้ภายในระยะเวลาที่กำหนด, การทดสอบจะล้มเหลว
-            ใช้เมื่อคุณต้องการรอให้องค์ประกอบมองเห็นได้จริงก่อนที่จะดำเนินการต่อ
+        รอจนกว่าองค์ประกอบ (element) ที่ระบุจะปรากฏในหน้าแอพพลิเคชันและสามารถมองเห็นได้
+        ถ้าองค์ประกอบไม่ปรากฏหรือไม่สามารถมองเห็นได้ภายในระยะเวลาที่กำหนด, การทดสอบจะล้มเหลว
+        ใช้เมื่อคุณต้องการรอให้องค์ประกอบมองเห็นได้จริงก่อนที่จะดำเนินการต่อ
+
+        ตัวอย่างการใช้งาน:
+
+        | t_wait_element_is_visible | ตำแหน่ง | เวลาที่จะให้รอ (ค่าเริ่มต้น=20s) |
 
             
         """
@@ -59,10 +78,21 @@ class WaitingElement:
         `Wait Until Page Does Not Contain Element`
         and BuiltIn keyword `Wait Until Keyword Succeeds`.
 
+        Example:
+
+        | t_wait_until_page_contains_element | locator | timeout (defaul=20s) |
+
+
+        =========================================================
+
         Wait Until Page Contains Element:
         รอจนกว่าองค์ประกอบ (element) ที่ระบุจะปรากฏในหน้าแอพพลิเคชัน แต่ไม่จำเป็นต้องมองเห็นได้
         ถ้าองค์ประกอบไม่ปรากฏในหน้าภายในระยะเวลาที่กำหนด, การทดสอบจะล้มเหลว
         ใช้เมื่อคุณต้องการรอให้องค์ประกอบมีอยู่ใน DOM ของหน้าเว็บ แต่ไม่จำเป็นต้องมองเห็นได้จริง
+
+        ตัวอย่างการใช้งาน:
+
+        | t_wait_until_page_contains_element | ตำแหน่ง | เวลาที่จะให้รอ (ค่าเริ่มต้น=20s) |
         """
         if not error:
             error = "Element '%s' did not appear in <TIMEOUT>" % locator

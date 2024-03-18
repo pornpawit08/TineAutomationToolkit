@@ -60,8 +60,28 @@ class ControlElement:
  
         #Click_Element
     def t_click_element(self,locator):
-        """กด click หรือ tap element
+        """Click element identified by `locator`.
+
+        Key attributes for arbitrary elements are `index` and `name`. See
+        `introduction` for details about locating elements.
+
+        Example:
+
+        |t_click_element | locator |
+
+        =========================================================
+
+        คลิกที่องค์ประกอบที่ระบุด้วย locator (ตัวระบุตำแหน่ง)    
+        กด click หรือ tap element
         ตาม locator ที่ระบุเข้ามา
+
+        ตัวอย่างการใช้งาน:
+        
+        |t_click_element | ตัวระบุตำแหน่ง |
+
+
+        **** locator ได้แก่ id , name , xpath เป็นต้น  ****
+
         """
         log._info("Clicking element '%s'." % locator)
         self._element_find_t(locator, True , True).click()
@@ -75,7 +95,9 @@ class ControlElement:
         | Get Element Attribute | locator | name |
         | Get Element Attribute | locator | value |
 
-        ใช้การดึงข้อมูลแอตทริบิวต์ของอีเลเมนต์โดยใช้ชื่อแอตทริบิวต์: ชื่อ, ค่า, ฯลฯ
+         =========================================================
+
+        ใช้การดึงข้อมูลแอตทริบิวต์ของอีเลเมนต์โดยใช้ชื่อแอตทริบิวต์: ชื่อ, ค่า, ตำแหน่ง ,ฯลฯ เป็นต้น
 
         ตัวอย่าง:
 
@@ -105,10 +127,11 @@ class ControlElement:
 
         New in AppiumLibrary 1.4.
 
-        
+        =========================================================
+
         ดึงข้อความจากอีเลเมนต์ (สำหรับการใช้งานในไฮบริดและเบราว์เซอร์มือถือ ใช้ตัวระบุตำแหน่ง xpath, อื่นๆ อาจทำให้เกิดปัญหา)
 
-        ตัวอย่าง:
+        ตัวอย่างการใช้งาน:
 
         | ${text} | ดึงข้อความ | //*[contains(@text,'foo')] |
 
@@ -125,9 +148,20 @@ class ControlElement:
 
         See `introduction` for details about locating elements.
 
-        พิมพ์ข้อความที่กำหนดให้ (text) ลงในช่องข้อความที่ระบุด้วย locator.
+        Example:
 
-        ดู introduction เพื่อดูรายละเอียดเกี่ยวกับการระบุตำแหน่งของอีเลเมนต์.
+        | t_input_text | text |
+
+        =========================================================
+
+        พิมพ์ข้อความที่กำหนดให้ (text) ลงในช่องข้อความที่ระบุด้วย locator
+        
+        ดู introduction เพื่อดูรายละเอียดเกี่ยวกับการระบุตำแหน่งของอีเลเมนต์
+
+        ตัวอย่างการใช้งาน:
+
+        | t_input_text | ข้อความที่ต้องการจะใส่ |
+
         """
         log._info("Typing text '%s' into text field '%s'" % (text, locator))
         self._element_input_text_by_locator(locator, text)

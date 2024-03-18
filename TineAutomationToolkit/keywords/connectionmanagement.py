@@ -15,12 +15,18 @@ class ConnectionManagement:
     #KeyWord
     
     def t_close_application_session(self):
-        """ปิดแอพปัจจุบันและปิดเซสชัน"""
+        """Close Application And Quit Seesion
+
+        =========================================================
+        
+        ปิดแอพปัจจุบันและปิดเซสชัน"""
 
     def t_background_application(self, seconds=5):
         """
         Puts the application in the background on the device for a certain
         duration.
+
+        =========================================================
 
         วางแอปพลิเคชันไว้ในพื้นหลังของอุปกรณ์เป็นระยะเวลาหนึ่ง.
         """
@@ -33,6 +39,8 @@ class ConnectionManagement:
          - app_id - BundleId for iOS. Package name for Android.
 
         New in AppiumLibrary v2
+
+        =========================================================
 
         
         เปิดใช้งานแอปพลิเคชันหากมันไม่ได้รันอยู่หรือรันอยู่ในพื้นหลัง
@@ -49,8 +57,11 @@ class ConnectionManagement:
          - app_id - BundleId for iOS. Package name for Android.
 
         New in AppiumLibrary v2
+
+        =========================================================
         
-        ยุติแอปพลิเคชันที่กำหนดไว้บนอุปกรณ์
+        ยุติแอปพลิเคชันที่กำหนดไว้บนอุปกรณ์แต่ยัง active อยู่ในระบบ
+        สามารถเปิดต่อได้
 
         อาร์กิวเมนต์:  
 
@@ -61,7 +72,11 @@ class ConnectionManagement:
     #PRIVATE_FUNCTION
         
     def _current_application(self):
-        """
+        """Return the instance of the current application
+        From AppiumFlutterLibrary
+
+        =========================================================
+
         คืนค่าอินสแตนซ์ของแอปพลิเคชันปัจจุบัน
         จาก AppiumFlutterLibrary
         """
