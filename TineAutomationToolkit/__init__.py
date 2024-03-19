@@ -7,7 +7,8 @@ class TineAutomationToolkit(
     WaitingElement,
     ConnectionManagement,
     ControlElement,
-    Scroll
+    Scroll,
+    CaptureScreenShot
     ):
 
     def __init__(self):
