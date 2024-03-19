@@ -12,7 +12,7 @@ class Scroll:
         pass
 
 
-    def t_scroll(self, start_locator, end_locator):
+    def native_scroll(self, start_locator, end_locator):
         """
         Scrolls from one element to another
         Key attributes for arbitrary elements are `id` and `name`. See
@@ -36,7 +36,7 @@ class Scroll:
         driver = cache_app._current_application()
         driver.scroll(el1, el2)
 
-    def t_swipe(self, start_x, start_y, offset_x, offset_y, duration=1000):
+    def native_swipe(self, start_x, start_y, offset_x, offset_y, duration=1000):
         """
         Swipe from one point to another point, for an optional duration.
 

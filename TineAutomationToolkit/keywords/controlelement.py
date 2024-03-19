@@ -6,6 +6,8 @@ from AppiumLibrary.locators import ElementFinder
 from AppiumLibrary.keywords._logging import _LoggingKeywords
 from .connectionmanagement import ConnectionManagement
 from selenium.webdriver.remote.webelement import WebElement
+from appium.webdriver.common.touch_action import TouchAction
+
 
 cache_app = ConnectionManagement()
 log = _LoggingKeywords()
@@ -28,7 +30,7 @@ class ControlElement:
     
         #Switch_Mode
         
-    def t_switch_mode(self,mode):
+    def native_switch_mode(self,mode):
         """The keyword is used for switching content between Native_app and Flutter
         It is necessary to open the app using the AppiumFlutterLibrary and the automation name: Flutter.
         
@@ -59,7 +61,7 @@ class ControlElement:
             print("... Status Mode : Flutter")
  
         #Click_Element
-    def t_click_element(self,locator):
+    def native_click_element(self,locator):
         """Click element identified by `locator`.
 
         Key attributes for arbitrary elements are `index` and `name`. See
@@ -86,8 +88,34 @@ class ControlElement:
         log._info("Clicking element '%s'." % locator)
         self._element_find_t(locator, True , True).click()
 
+    def native_click_element_at_coordinates(self, coordinate_X, coordinate_Y):
+        """*DEPRECATED!!* Since selenium v4, use other keywords.
+
+        click element at a certain coordinate 
+        
+        Example:
+
+        | native_click_element_at_coordinates | coordinate_X | coordinate_Y |
+
+        =========================================================
+
+        
+        ไม่แนะนำให้ใช้!! ตั้งแต่เวอร์ชัน 4 ของ Selenium, ให้ใช้คีย์เวิร์ดอื่นแทน
+
+        คลิกที่องค์ประกอบที่พิกัดที่กำหนด
+
+        ตัวอย่างการใช้งาน:
+
+        | native_click_element_at_coordinates | ระยะพิกัด X | ระยะพิกัด Y |
+
+        """
+        log._info("Pressing at (%s, %s)." % (coordinate_X, coordinate_Y))
+        driver = cache_app._current_application()
+        action = TouchAction(driver)
+        action.press(x=coordinate_X, y=coordinate_Y).release().perform()
+
         #Get
-    def t_get_element_attribute(self, locator, attribute):
+    def native_get_element_attribute(self, locator, attribute):
         """Get element attribute using given attribute: name, value,...
 
         Examples:
@@ -118,7 +146,7 @@ class ControlElement:
         except:
             raise AssertionError("Attribute '%s' is not valid for element '%s'" % (attribute, locator))
         
-    def t_get_text(self, locator):
+    def native_get_text(self, locator):
         """Get element text (for hybrid and mobile browser use `xpath` locator, others might cause problem)
 
         Example:
@@ -143,7 +171,7 @@ class ControlElement:
     
       #Input
     
-    def t_input_text(self, locator, text):
+    def native_input_text(self, locator, text):
         """Types the given `text` into text field identified by `locator`.
 
         See `introduction` for details about locating elements.

@@ -14,14 +14,14 @@ class ConnectionManagement:
         pass
     #KeyWord
     
-    def t_close_application_session(self):
+    def native_close_application_session(self):
         """Close Application And Quit Seesion
 
         =========================================================
         
         ปิดแอพปัจจุบันและปิดเซสชัน"""
 
-    def t_background_application(self, seconds=5):
+    def native_background_application(self, seconds=5):
         """
         Puts the application in the background on the device for a certain
         duration.
@@ -32,7 +32,7 @@ class ConnectionManagement:
         """
         self._current_application().background_app(seconds)
         
-    def t_activate_application(self, app_id):
+    def native_activate_application(self, app_id):
         """
         Activates the application if it is not running or is running in the background.
         Args:
@@ -49,7 +49,7 @@ class ConnectionManagement:
         """
         self._current_application().activate_app(app_id)
 
-    def t_terminate_application(self, app_id):
+    def native_terminate_application(self, app_id):
         """
         Terminate the given app on the device
 

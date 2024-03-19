@@ -23,7 +23,7 @@ class WaitingElement:
 
     #KeyWord
 
-    def t_wait_element_is_visible(self,locator, timeout=None, error=None):
+    def native_wait_element_is_visible(self,locator, timeout=None, error=None):
         """Waits until element specified with `locator` is visible.
         Fails if `timeout` expires before the element is visible. See
         `introduction` for more information about `timeout` and its
@@ -64,7 +64,7 @@ class WaitingElement:
         
         self._wait_until_no_error(timeout, check_visibility)
 
-    def t_wait_until_page_contains_element(self, locator, timeout=None, error=None):
+    def native_wait_until_page_contains_element(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` appears on current page.
 
         Fails if `timeout` expires before the element appears. See
