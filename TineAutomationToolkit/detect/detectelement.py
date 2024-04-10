@@ -52,9 +52,10 @@ class DetectElement():
         # Used `id` instead of _find_by_key_attrs since iOS and Android internal `id` alternatives are
         # different and inside appium python client. Need to expose these and improve in order to make
         # _find_by_key_attrs useful.
-        return self._find_by_id(application, criteria, tag, constraints)
+        # return self._find_by_id(application, criteria, tag, constraints)
+        return self._find_by_key(application, criteria, tag, constraints)
     
-    def _find_by_key(self, application, element_key):
+    def _find_by_key(self, application, element_key, tag, constraints):
         finder_key = detect_element.by_value_key(element_key)
         element = FlutterElement(application, finder_key)
 
