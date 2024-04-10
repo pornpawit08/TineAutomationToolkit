@@ -7,12 +7,15 @@ from AppiumLibrary.keywords._logging import _LoggingKeywords
 from .connectionmanagement import ConnectionManagement
 from selenium.webdriver.remote.webelement import WebElement
 from appium.webdriver.common.touch_action import TouchAction
+from TineAutomationToolkit.detect.detectelement import DetectElement
+from TineAutomationToolkit.detect import detectelement
 
 
 cache_app = ConnectionManagement()
 log = _LoggingKeywords()
 element_finder_t = ElementFinder()
-
+detect_element_finder = DetectElement()
+test = detectelement()
 
 def isstr(s):
     return isinstance(s, str)
@@ -193,7 +196,51 @@ class ControlElement:
         """
         log._info("Typing text '%s' into text field '%s'" % (text, locator))
         self._element_input_text_by_locator(locator, text)
+
+    def flutter_get_element_attribute(self, locator, attribute):
+        """Get element attribute using given attribute: name, value,...
+
+        Examples:
+
+        | Get Element Attribute | locator | name |
+        | Get Element Attribute | locator | value |
+        """
+        elements = self._element_find_flutter(locator, False, True)
+        # elements = self._element_find_t(locator, False, True)
+        ele_len = len(elements)
+        if ele_len == 0:
+            raise AssertionError("Element '%s' could not be found" % locator)
+        elif ele_len > 1:
+            self._info("CAUTION: '%s' matched %s elements - using the first element only" % (locator, len(elements)))
+
+        try:
+            attr_val = elements[0].get_attribute(attribute)
+            log._info("Element '%s' attribute '%s' value '%s' " % (locator, attribute, attr_val))
+            return attr_val
+        except:
+            raise AssertionError("Attribute '%s' is not valid for element '%s'" % (attribute, locator))
+    
     #PRIVATE_FUNCTION
+
+    def _element_find_flutter(self, locator, first_only, required, tag=None):
+        application = cache_app._current_application()
+        elements = None
+        if isstr(locator):
+            _locator = locator
+            element = detect_element_finder.find_attribute(application , _locator , tag)
+            if required and len(elements) == 0:
+                raise ValueError("Element locator '" + locator + "' did not match any elements.")
+            if first_only:
+                if len(elements) == 0: return None
+                return elements[0]
+        elif isinstance(locator, WebElement):
+            if first_only:
+                return locator
+            else:
+                elements = [locator]
+
+        
+        return element
         
     def _element_find_t(self, locator, first_only, required, tag=None):
         application = cache_app._current_application()
