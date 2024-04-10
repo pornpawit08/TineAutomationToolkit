@@ -7,15 +7,15 @@ from AppiumLibrary.keywords._logging import _LoggingKeywords
 from .connectionmanagement import ConnectionManagement
 from selenium.webdriver.remote.webelement import WebElement
 from appium.webdriver.common.touch_action import TouchAction
-from TineAutomationToolkit.detect.detectelement import DetectElement
-from TineAutomationToolkit.detect import detectelement
+from TineAutomationToolkit.detect import DetectElement
+
 
 
 cache_app = ConnectionManagement()
 log = _LoggingKeywords()
 element_finder_t = ElementFinder()
 detect_element_finder = DetectElement()
-test = detectelement()
+
 
 def isstr(s):
     return isinstance(s, str)
