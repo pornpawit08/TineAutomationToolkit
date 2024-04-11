@@ -69,6 +69,24 @@ class ConnectionManagement:
         ใหม่ใน AppiumLibrary เวอร์ชัน 2
         """
         return self._current_application().terminate_app(app_id)
+    
+    def commond_install_app(self, app_path, app_package):
+        """ Install App via Appium
+        
+        Android .
+
+        - app_path - path to app (.apk)
+        - app_package - package of install app to verify
+
+        Ios .
+
+        - app_path - path to app (.app | .ipa)
+        - bundleId - package of install app to verify
+        """
+        driver = self._current_application()
+        driver.install_app(app_path)
+        return driver.is_app_installed(app_package)
+    
     #PRIVATE_FUNCTION
         
     def _current_application(self):

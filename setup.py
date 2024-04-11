@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="TineAutomationToolkit",
-    version="1.0.3",
+    version="1.0.4",
     author="Pornpawit Suttha",
     author_email="pornpawit14suttha@gmail.com",
     description="Test Library for TineAutomationToolkit",
