@@ -8,7 +8,9 @@ class TineAutomationToolkit(
     ConnectionManagement,
     ControlElement,
     Scroll,
-    CaptureScreenShot
+    CaptureScreenShot,
+    KeyEvent,
+    Touch
     ):
 
     def __init__(self):

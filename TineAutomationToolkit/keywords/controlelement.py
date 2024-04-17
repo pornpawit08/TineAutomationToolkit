@@ -8,6 +8,7 @@ from .connectionmanagement import ConnectionManagement
 from selenium.webdriver.remote.webelement import WebElement
 from appium.webdriver.common.touch_action import TouchAction
 from TineAutomationToolkit.detect import DetectElement
+from unicodedata import normalize
 
 
 
@@ -63,7 +64,8 @@ class ControlElement:
             driver.switch_to.context('FLUTTER')
             print("... Status Mode : Flutter")
  
-        #Click_Element
+    #NATIVE_APP
+
     def native_click_element(self,locator):
         """Click element identified by `locator`.
 
@@ -118,6 +120,7 @@ class ControlElement:
         action.press(x=coordinate_X, y=coordinate_Y).release().perform()
 
         #Get
+   
     def native_get_element_attribute(self, locator, attribute):
         """Get element attribute using given attribute: name, value,...
 
@@ -148,7 +151,35 @@ class ControlElement:
             return attr_val
         except:
             raise AssertionError("Attribute '%s' is not valid for element '%s'" % (attribute, locator))
-        
+
+    def native_get_element_location(self, locator):
+        """Get element location
+        Key attributes for arbitrary elements are `id` and `name`.
+
+        =========================================================
+
+        รับตำแหน่งขององค์ประกอบ
+        คุณสมบัติหลักสำหรับองค์ประกอบทั่วไปคือ `id` และ `name` 
+        """
+        element = self._element_find_t(locator, True, True)
+        element_location = element.location
+        log._info("Element '%s' location: %s " % (locator, element_location))
+        return element_location
+
+    def native_get_element_size(self, locator):
+        """Get element size
+        Key attributes for arbitrary elements are `id` and `name`
+
+        =========================================================
+
+        รับขนาดขององค์ประกอบ
+        คุณสมบัติหลักสำหรับองค์ประกอบทั่วไปคือ `id` และ `name`
+        """
+        element = self._element_find_t(locator, True, True)
+        element_size = element.size
+        log._info("Element '%s' size: %s " % (locator, element_size))
+        return element_size
+
     def native_get_text(self, locator):
         """Get element text (for hybrid and mobile browser use `xpath` locator, others might cause problem)
 
@@ -197,8 +228,94 @@ class ControlElement:
         log._info("Typing text '%s' into text field '%s'" % (text, locator))
         self._element_input_text_by_locator(locator, text)
 
+    def native_element_text_should_be(self, locator, expected, message=''):
+        """Verifies element identified by ``locator`` exactly contains text ``expected``.
+        In contrast to `Element Should Contain Text`, this keyword does not try
+        a substring match but an exact match on the element identified by ``locator``.
+        ``message`` can be used to override the default error message.
+
+        New in AppiumLibrary 1.4.
+
+        =========================================================
+
+        ตรวจสอบว่าองค์ประกอบที่ระบุโดย ``locator`` มีข้อความ ``expected`` อย่างแม่นยำ
+        ต่างจาก `Element Should Contain Text`, คำสั่งนี้ไม่พยายามทำการจับคู่ข้อความย่อย แต่ทำการจับคู่ข้อความอย่างแม่นยำบนองค์ประกอบที่ระบุโดย ``locator``
+        ``message`` สามารถใช้เพื่อแทนที่ข้อความแสดงข้อผิดพลาดเริ่มต้น
+
+        ใหม่ใน AppiumLibrary 1.4
+
+        """
+        log._info("Verifying element '%s' contains exactly text '%s'."
+                    % (locator, expected))
+        element = self._element_find_t(locator, True, True)
+        actual = element.text
+        if expected != actual:
+            if not message:
+                message = "The text of element '%s' should have been '%s' but "\
+                          "in fact it was '%s'." % (locator, expected, actual)
+            raise AssertionError(message)
+
+    def native_is_keyboard_shown(self):
+        """Return true if Android keyboard is displayed or False if not displayed
+        No parameters are used.
+
+        =========================================================
+
+        คืนค่าเป็นจริงหากแป้นพิมพ์แอนดรอยด์ถูกแสดง หรือคืนค่าเป็นเท็จหากไม่ได้แสดง
+        ไม่ใช้อาร์กิวเมนต์ใดๆ
+        """
+        driver = cache_app._current_application()
+        return driver.is_keyboard_shown()
+    
+    def native_hide_keyboard(self, key_name=None):
+        """Hides the software keyboard on the device. (optional) In iOS, use `key_name` to press
+        a particular key, ex. `Done`. In Android, no parameters are used.
+
+        =========================================================
+
+        ซ่อนแป้นพิมพ์ซอฟต์แวร์บนอุปกรณ์ (เพิ่มเติม) ใน iOS, ใช้ `key_name` 
+        เพื่อกดปุ่มที่ระบุ เช่น `Done` ใน Android, ไม่ใช้อาร์กิวเมนต์ใดๆ
+        """
+        driver = cache_app._current_application()
+        driver.hide_keyboard(key_name)
+
+    def native_get_webelements(self, locator):
+        """Returns list of [http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.remote.webelement|WebElement] objects matching ``locator``.
+
+        Example:
+        | @{elements}    | Get Webelements | id=my_element |
+        | Click Element  | @{elements}[2]  |               |
+
+        This keyword was changed in AppiumLibrary 1.4 in following ways:
+        - Name is changed from `Get Elements` to current one.
+        - Deprecated argument ``fail_on_error``, use `Run Keyword and Ignore Error` if necessary.
+
+        New in AppiumLibrary 1.4.
+        
+        =========================================================
+
+        คืนค่าเป็นรายการของออบเจ็กต์ [WebElement](http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.remote.webelement) ที่ตรงกับ ``locator``.
+
+        ตัวอย่าง:
+        | @{elements}    | รับ Webelements | id=my_element |
+        | คลิกองค์ประกอบ | @{elements}[2]  |               |
+
+        คำสั่งนี้ได้รับการเปลี่ยนแปลงใน AppiumLibrary 1.4 ดังนี้:
+        - ชื่อถูกเปลี่ยนจาก `Get Elements` เป็นชื่อปัจจุบัน
+        - อาร์กิวเมนต์ที่ไม่แนะนำอีกต่อไป ``fail_on_error``, ใช้ `Run Keyword and Ignore Error` ถ้าจำเป็น
+
+        ใหม่ใน AppiumLibrary 1.4
+        """
+        return self._element_find_t(locator, False, True)
+
+    #Flutter
+
     def flutter_get_element_attribute(self, locator, attribute):
-        """Get element attribute using given attribute: name, value,...
+        """ *******Not available wait for update flutter*******
+
+        Because FinderType is Limited
+
+        Get element attribute using given attribute: name, value,...
 
         Examples:
 
@@ -285,3 +402,8 @@ class ControlElement:
             element.send_keys(text)
         except Exception as e:
             raise e
+    
+    def _is_text_present(self, text):
+        text_norm = normalize('NFD', text)
+        source_norm = normalize('NFD', cache_app.get_source())
+        return text_norm in source_norm

@@ -97,6 +97,25 @@ class WaitingElement:
         if not error:
             error = "Element '%s' did not appear in <TIMEOUT>" % locator
         self._wait_until(timeout, error, conelement._is_element_present, locator)
+
+    def native_wait_until_page_contains(self, text, timeout=None, error=None):
+        """Waits until `text` appears on current page.
+
+        Fails if `timeout` expires before the text appears. See
+        `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Does Not Contain`,
+        `Wait Until Page Contains Element`,
+        `Wait Until Page Does Not Contain Element` and
+        BuiltIn keyword `Wait Until Keyword Succeeds`.
+        """
+        if not error:
+            error = "Text '%s' did not appear in <TIMEOUT>" % text
+        self._wait_until(timeout, error, conelement._is_text_present, text)
+
     
     #PRIVATE_FUNCTION
         

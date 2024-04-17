@@ -71,7 +71,8 @@ class ConnectionManagement:
         return self._current_application().terminate_app(app_id)
     
     def commond_install_app(self, app_path, app_package):
-        """ Install App via Appium
+        """ *******Not available wait for update flutter*******
+        Install App via Appium
         
         Android .
 
@@ -100,4 +101,14 @@ class ConnectionManagement:
         """
         return cache_app.get_library_instance('AppiumFlutterLibrary')._current_application()
         # return self._bi.get_library_instance('AppiumFlutterLibrary')._current_application()
+
+    def get_source(self):
+        """Returns the entire source of the current page.
+        
+        =========================================================
+
+        ฟังก์ชันนี้จะส่งคืนสตริงที่มีซอร์สโค้ด HTML ของหน้าเว็บที่กำลังแสดงอยู่ในเบราว์เซอร์ในขณะนั้น 
+        ซึ่งสามารถนำไปใช้ในการตรวจสอบหรือวิเคราะห์โครงสร้างหรือเนื้อหาของหน้าเว็บได้
+        """
+        return self._current_application().page_source
         
