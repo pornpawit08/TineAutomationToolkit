@@ -200,7 +200,7 @@ class ControlElement:
         ใหม่ใน AppiumLibrary 1.4.
         """
         text = self._get_text(locator)
-        self._info("Element '%s' text is '%s' " % (locator, text))
+        log._info("Element '%s' text is '%s' " % (locator, text))
         return text
     
       #Input
