@@ -8,5 +8,6 @@ from TineAutomationToolkit.keywords.toolkitstest import ToolkitsTest
 from TineAutomationToolkit.keywords.capturescreenshot import CaptureScreenShot
 from TineAutomationToolkit.keywords.keyevent import KeyEvent
 from TineAutomationToolkit.keywords.touch import Touch
+from TineAutomationToolkit.keywords.convertobject import ConvertObject
 
-__all__ = ['ToolkitsTest' , 'ConnectionManagement', 'WaitingElement', 'ControlElement','Scroll','CaptureScreenShot','KeyEvent','Touch']
+__all__ = ['ToolkitsTest' , 'ConnectionManagement', 'WaitingElement', 'ControlElement','Scroll','CaptureScreenShot','KeyEvent','Touch','ConvertObject']

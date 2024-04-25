@@ -10,7 +10,8 @@ class TineAutomationToolkit(
     Scroll,
     CaptureScreenShot,
     KeyEvent,
-    Touch
+    Touch,
+    ConvertObject
     ):
 
     def __init__(self):
