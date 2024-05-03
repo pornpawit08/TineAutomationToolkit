@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="TineAutomationToolkit",
-    version="1.0.8",
+    version="1.0.9",
     author="Pornpawit Suttha",
     author_email="pornpawit14suttha@gmail.com",
     description="Test Library for TineAutomationToolkit",
@@ -11,7 +11,8 @@ setup(
     url="https://github.com/pornpawit08/TineAutomationToolkit.git",
     packages=find_packages(),
     install_requires=[
-        'robotframework>=3.0', 
+        'robotframework>=3.0',
+        'pytz',
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

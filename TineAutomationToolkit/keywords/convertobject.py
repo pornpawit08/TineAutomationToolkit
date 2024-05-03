@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 import bson
 import logging
+import pytz
+import re
+
+from datetime import datetime
 
 class ConvertObject:
 
@@ -42,6 +46,26 @@ class ConvertObject:
         """
         self._tree_structure(data)
 
+    def convert_time_to_local_timezone(self,date,timezone='Asia/Bangkok'):
+        # กำหนด timezone เป็น UTC
+        utc_timezone = pytz.timezone('UTC')
+        # แปลง timezone จาก UTC เป็น local timezone
+        local_timezone = pytz.timezone(timezone)  
+        # ตรวจสอบว่าข้อมูลนำเข้าเป็น datetime object หรือไม่
+        if isinstance(date, datetime):
+            date_time = date
+            local_date_time = utc_timezone.localize(date).astimezone(local_timezone)
+        else:
+            # ตรวจสอบว่าข้อมูลนำเข้าเป็นรูปแบบที่ถูกต้องหรือไม่
+            if not self._is_valid_iso_format(date):
+                raise ValueError("Invalid date format. Please provide the date in the format 'YYYY-MM-DDTHH:MM:SS.sss+HH:MM'")
+        
+            # แปลง string เป็น datetime object
+            date_time = datetime.fromisoformat(date)
+            local_date_time = date_time.astimezone(local_timezone)
+        
+        return local_date_time
+
     #Private Function
 
     def _tree_structure(self, data, level=0, prefix=''):
@@ -60,3 +84,11 @@ class ConvertObject:
                 self._tree_structure(item, level + 1)
         else:
             logging.info(f"{indent}{branch}{prefix}{data}")
+
+    def _is_valid_iso_format(self,date_str):
+        """ Owner : suthasinee.k@arcadiaapm.com
+        ***|    Description     |***
+        | 
+        """
+        pattern = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}\+\d{2}:\d{2}$')
+        return bool(pattern.match(date_str))
