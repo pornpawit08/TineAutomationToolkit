@@ -47,6 +47,10 @@ class ConvertObject:
         self._tree_structure(data)
 
     def convert_time_to_local_timezone(self,date,timezone='Asia/Bangkok'):
+        """ Owner : suthasinee.k@arcadiaapm.com
+        ***|    Description     |***
+        | 
+        """
         # กำหนด timezone เป็น UTC
         utc_timezone = pytz.timezone('UTC')
         # แปลง timezone จาก UTC เป็น local timezone
