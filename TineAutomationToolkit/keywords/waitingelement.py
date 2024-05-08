@@ -151,6 +151,41 @@ class WaitingElement:
 
         self._wait_until_no_error(timeout, check_present)    
 
+    def native_wait_until_page_does_not_contain_element(self, locator, timeout=None, error=None):
+        """Waits until element specified with `locator` disappears from current page.
+
+        Fails if `timeout` expires before the element disappears. See
+        `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+         See also `Wait Until Page Contains`,
+        `Wait Until Page Does Not Contain`,
+        `Wait Until Page Contains Element` and
+        BuiltIn keyword `Wait Until Keyword Succeeds`.
+
+        ===================================================
+
+        จะล้มเหลวถ้า `timeout` หมดก่อนที่ `element` จะหายไป ดู
+        `introduction` เพื่อข้อมูลเพิ่มเติมเกี่ยวกับ `timeout` และค่าเริ่มต้นของมัน
+
+        `error` สามารถใช้เพื่อแทนที่ข้อความแสดงข้อผิดพลาดเริ่มต้น
+
+        ดูเพิ่มเติมที่ `Wait Until Page Contains`,
+        `Wait Until Page Contains Element`,
+        `Wait Until Page Does Not Contain Element` และคำสั่ง BuiltIn `Wait Until Keyword Succeeds`.
+        """
+
+        def check_present():
+            present = conelement._is_element_present(locator)
+            if not present:
+                return
+            else:
+                return error or "Text '%s' did not disappear in %s" % (locator, self._format_timeout(timeout))
+
+        self._wait_until_no_error(timeout, check_present)   
+
     
     #PRIVATE_FUNCTION
         

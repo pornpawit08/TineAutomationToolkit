@@ -49,7 +49,8 @@ class ConvertObject:
     def convert_time_to_local_timezone(self,date,timezone='Asia/Bangkok'):
         """ Owner : suthasinee.k@arcadiaapm.com
         ***|    Description     |***
-        | 
+        |   มีไว้สำหรับรับเวลาที่ได้มาแล้วแปลงเป็นเวลาของ TimeZone 
+        |   โดย Default คือ Asia/Bangkok
         """
         # กำหนด timezone เป็น UTC
         utc_timezone = pytz.timezone('UTC')
