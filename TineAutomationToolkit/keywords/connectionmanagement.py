@@ -70,6 +70,30 @@ class ConnectionManagement:
         """
         return self._current_application().terminate_app(app_id)
     
+    def native_get_window_height(self):
+        """Get current device height.
+
+        Example:
+        | ${width}       | Get Window Width |
+        | ${height}      | Get Window Height |
+        | Click A Point  | ${width}         | ${height} |
+
+        New in AppiumLibrary 1.4.5
+        """
+        return self._current_application().get_window_size()['height']
+    
+    def native_get_window_width(self):
+        """Get current device width.
+
+        Example:
+        | ${width}       | Get Window Width |
+        | ${height}      | Get Window Height |
+        | Click A Point  | ${width}          | ${height} |
+
+        New in AppiumLibrary 1.4.5
+        """
+        return self._current_application().get_window_size()['width']
+    
     def commond_install_app(self, app_path, app_package):
         """ *******Not available wait for update flutter*******
         Install App via Appium
@@ -87,6 +111,8 @@ class ConnectionManagement:
         driver = self._current_application()
         driver.install_app(app_path)
         return driver.is_app_installed(app_package)
+    
+    
     
     #PRIVATE_FUNCTION
         
