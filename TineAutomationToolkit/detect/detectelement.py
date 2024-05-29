@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from appium_flutter_finder import FlutterElement , FlutterFinder
+# from appium_flutter_finder import FlutterElement , FlutterFinder
 from AppiumLibrary import utils
 from appium.webdriver.common.appiumby import AppiumBy
 from robot.api import logger
+from TineAutomationToolkit.detect.flutterfinderelement import FlutterDetectElement , FlutterFinderElement
 
-detect_element = FlutterFinder()
+detect_element = FlutterFinderElement()
 # strategies = {
 #     'default': _find_by_default,
 #     'id': _find_by_id,
@@ -57,7 +58,7 @@ class DetectElement():
     
     def _find_by_key(self, application, element_key, tag, constraints):
         finder_key = detect_element.by_value_key(element_key)
-        element = FlutterElement(application, finder_key)
+        element = FlutterDetectElement(application, finder_key)
 
         return element
     

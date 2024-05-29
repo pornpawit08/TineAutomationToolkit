@@ -308,8 +308,8 @@ class ControlElement:
         """
         return self._element_find_t(locator, False, True)
 
-    #Flutter
-
+    #Flutter (Not available , อยู่ในช่วงทดสอบ ยังไม่สามารถใช้งานได้)
+    
     def flutter_get_element_attribute(self, locator, attribute):
         """ *******Not available wait for update flutter*******
 
@@ -336,6 +336,17 @@ class ControlElement:
             return attr_val
         except:
             raise AssertionError("Attribute '%s' is not valid for element '%s'" % (attribute, locator))
+        
+    def flutter_check_element_enable(self,locator):
+        """ *******Not available wait for update flutter*******
+
+        Get element enable 
+
+        Examples:
+
+        | Check Element Enable | locator |
+        """
+        print("ยังอยู่ในช่วงทดสอบ ยังไม่สามารถใช้งานได้")
     
     #PRIVATE_FUNCTION
 

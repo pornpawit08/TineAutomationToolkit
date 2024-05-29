@@ -3,6 +3,8 @@ import bson
 import logging
 import pytz
 import re
+import base64
+import json
 
 from datetime import datetime
 
@@ -70,6 +72,24 @@ class ConvertObject:
             local_date_time = date_time.astimezone(local_timezone)
         
         return local_date_time
+    
+    #(ยังใช้ไม่ได้อยู่ในช่วงทดสอบ)
+    def convert_get_render_tree_to_json(self,tree):
+        """ Owner : pornpawit.s@chareontut.co.th
+        ***|    Description     |***
+        |   มีไว้สำหรับนำข้อมูล get render tree แปลง
+        |   เป็น json (ยังใช้ไม่ได้อยู่ในช่วงทดสอบ)
+        """
+        # แปลงข้อมูล Render Tree เป็น JSON
+        render_tree_json = json.dumps(tree, indent=4)
+        with open('render_tree.json', 'w') as json_file:
+            json_file.write(render_tree_json)
+        
+        with open('render_tree.json', 'r') as json_file:
+            data = json.load(json_file)
+            print(data)
+        
+
 
     #Private Function
 
