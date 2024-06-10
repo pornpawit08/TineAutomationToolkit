@@ -4,9 +4,11 @@ import robot
 
 from robot.libraries.BuiltIn import BuiltIn
 from TineAutomationToolkit.utils.applicationcache import ApplicationCache
+from AppiumLibrary.keywords._logging import _LoggingKeywords
 
 cache_app = BuiltIn()
 method_cache_app = ApplicationCache()
+log = _LoggingKeywords()
 
 class ConnectionManagement:
 
@@ -16,15 +18,16 @@ class ConnectionManagement:
         pass
     #KeyWord
     
-    def native_close_application_session(self):
+    def native_close_application_session(self,alias=None):
         """Close Application And Quit Seesion
 
         =========================================================
         
         ปิดแอพปัจจุบันและปิดเซสชัน"""
         driver = self._current_application()
-        self._debug('Closing application with session id %s' % self._current_application().session_id)
-        driver.method_cache_app.close()
+        log._debug('Closing application with session id %s' % self._current_application().session_id)
+        method_cache_app.register(driver,alias)
+        method_cache_app.close_all()
 
     def native_background_application(self, seconds=5):
         """

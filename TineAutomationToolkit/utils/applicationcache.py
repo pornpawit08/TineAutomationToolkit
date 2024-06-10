@@ -15,3 +15,10 @@ class ApplicationCache(ConnectionCache):
             self.current = self._no_current
             self.current_index = None
             self._closed.add(application)
+
+    def close_all(self):
+        for application in self._connections:
+            if application not in self._closed:
+                application.quit()
+        self.empty_cache()
+        return self.current
