@@ -3,8 +3,10 @@
 import robot
 
 from robot.libraries.BuiltIn import BuiltIn
+from TineAutomationToolkit.utils.applicationcache import ApplicationCache
 
 cache_app = BuiltIn()
+method_cache_app = ApplicationCache()
 
 class ConnectionManagement:
 
@@ -20,6 +22,9 @@ class ConnectionManagement:
         =========================================================
         
         ปิดแอพปัจจุบันและปิดเซสชัน"""
+        driver = self._current_application()
+        self._debug('Closing application with session id %s' % self._current_application().session_id)
+        driver.method_cache_app.close()
 
     def native_background_application(self, seconds=5):
         """
