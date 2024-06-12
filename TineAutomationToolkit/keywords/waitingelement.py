@@ -4,11 +4,12 @@ import time
 import robot
 
 from .controlelement import ControlElement
+from .connectionmanagement import ConnectionManagement
 from AppiumLibrary.keywords._applicationmanagement import _ApplicationManagementKeywords
 
 conelement = ControlElement()
 timeout_in_secs = float(5)
-af_amk = _ApplicationManagementKeywords()
+cache_app = ConnectionManagement()
 
 class WaitingElement:
     
@@ -201,7 +202,7 @@ class WaitingElement:
             if not timeout_error:
                 return
             if time.time() > maxtime:
-                af_amk.log_source()
+                cache_app.log_source()
                 raise AssertionError(timeout_error)
             time.sleep(0.2)
 
