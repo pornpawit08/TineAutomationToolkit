@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import robot
+import inspect
 
 from robot.libraries.BuiltIn import BuiltIn
 from TineAutomationToolkit.utils.applicationcache import ApplicationCache
@@ -145,4 +146,21 @@ class ConnectionManagement:
         ซึ่งสามารถนำไปใช้ในการตรวจสอบหรือวิเคราะห์โครงสร้างหรือเนื้อหาของหน้าเว็บได้
         """
         return self._current_application().page_source
+    
+    def log_source(self, loglevel='INFO'):
+        """Logs and returns the entire html source of the current page or frame.
+
+        The `loglevel` argument defines the used log level. Valid log levels are
+        `WARN`, `INFO` (default), `DEBUG`, `TRACE` and `NONE` (no logging).
+        """
+        ll = loglevel.upper()
+        if ll == 'NONE':
+            return ''
+        else:
+            if  "run_keyword_and_ignore_error" not in [check_error_ignored[3] for check_error_ignored in inspect.stack()]:
+                source = self._current_application().page_source
+                log._log(source, ll)
+                return source
+            else:
+                return ''
         

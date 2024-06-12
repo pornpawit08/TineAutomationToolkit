@@ -219,7 +219,7 @@ class ControlElement:
         การกำหนดค่า `NONE` เป็นระดับจะปิดการบันทึก
         """
         if self._is_element_present(locator):
-            self.log_source(loglevel)
+            cache_app.log_source(loglevel)
             raise AssertionError("Page should not have contained element '%s'" % locator)
         log._info("Current page not contains element '%s'." % locator)
     
