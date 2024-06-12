@@ -202,6 +202,26 @@ class ControlElement:
         text = self._get_text(locator)
         log._info("Element '%s' text is '%s' " % (locator, text))
         return text
+
+    #Should be
+    
+    def native_page_should_not_contain_element(self, locator, loglevel='INFO'):
+        """Verifies that current page not contains `locator` element.
+
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        =========================================================
+
+        หากคำสั่งนี้ล้มเหลว ระบบจะบันทึกแหล่งข้อมูลของหน้าโดยอัตโนมัติ
+        โดยใช้ระดับการบันทึกที่กำหนดไว้ในอาร์กิวเมนต์ `loglevel` ที่เป็นอุปกรณ์เสริม
+        การกำหนดค่า `NONE` เป็นระดับจะปิดการบันทึก
+        """
+        if self._is_element_present(locator):
+            self.log_source(loglevel)
+            raise AssertionError("Page should not have contained element '%s'" % locator)
+        log._info("Current page not contains element '%s'." % locator)
     
       #Input
     
