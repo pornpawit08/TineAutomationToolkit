@@ -166,12 +166,31 @@ class ConnectionManagement:
                 return ''
             
     def get_driver(self):
-        """
+        """*******Not available wait for update flutter*******
         Connect Session(Don't Create New Session & )
         """
         current_app_caps = self._current_application()
         driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities=current_app_caps, direct_connection=True)
         return driver
+    
+
+    def execute_script(self, script, **kwargs):
+        """
+        Execute a variety of native, mobile commands that aren't associated
+        with a specific endpoint. See [https://appium.io/docs/en/commands/mobile-command/|Appium Mobile Command]
+        for more details.
+
+        Example:
+        | &{scrollGesture}  |  create dictionary  |  left=${50}  |  top=${150}  |  width=${50}  |  height=${200}  |  direction=down  |  percent=${100}  |
+        | Sleep             |  1                  |
+        | Execute Script    |  mobile: scrollGesture  |  &{scrollGesture}  |
+
+        Updated in AppiumLibrary 2
+        """
+        if kwargs:
+            log._info(f"Provided dictionary: {kwargs}")
+
+        return self._current_application().execute_script(script, kwargs)
 
 
 

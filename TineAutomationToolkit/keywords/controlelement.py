@@ -345,8 +345,10 @@ class ControlElement:
 
     #Flutter (Not available , อยู่ในช่วงทดสอบ ยังไม่สามารถใช้งานได้)
 
-    def flutter_get_widget_diagnostic(self , locator ,subtreeDepth=2 , includeProperties=True):
-        """ Returns a JSON map of the DiagnosticsNode that is associated with the Widget identified by finder.
+    def flutter_get_widget_diagnostic(self , locator ,subtreeDepth=0 , includeProperties=True):
+        """ ********* (Not Support BrowserStack) **********
+        
+        Returns a JSON map of the DiagnosticsNode that is associated with the Widget identified by finder.
         The subtreeDepth argument controls how many layers of children will be included in the result. It defaults to zero, which means that no children of the Widget identified by finder will be part of the result.
         The includeProperties argument controls whether properties of the DiagnosticsNodes will be included in the result. It defaults to true.
         Widgets describe configuration for the rendering tree. Individual widgets may create multiple RenderObjects to actually layout and paint the desired configuration.
@@ -379,13 +381,25 @@ class ControlElement:
         ตัวอย่าง: หากคุณมี widget A ซึ่งมี widget ลูก B และ C, B มี widget ลูก D และ E และ C มี widget ลูก F, เมื่อตั้งค่าเป็น 2 คุณจะได้รับข้อมูลของ widget A, B, C, D, E, และ F
         """
         counterTextFinder = widget_finder.by_value_key(locator)
-        driver = cache_app.get_driver()
+        driver = cache_app._current_application()
         diagnostics = driver.execute_script('flutter:getWidgetDiagnostics', counterTextFinder, { 'includeProperties': includeProperties, 'subtreeDepth': subtreeDepth })
         #json
         formatted_json = json.dumps(diagnostics, indent=2, ensure_ascii=False)
         return  formatted_json
 
+    def flutter_get_value_widget_is_visible(self,formatted_json, key_to_check, value_to_check):
+        """ ********* (Not Support BrowserStack) **********
+        ตรวจสอบค่าของ key ใน JSON data และเทียบกับ value
+        ว่าปรากฏใน JSON DATA หรือไม่
         
+        example : flutter_get_value_widget_should_be | json data | key_to_check = "description" | value_to_check = "\"ถัดไป\""
+                  flutter_get_value_widget_should_be | json data | key_to_check = "value" | value_to_check = "ถัดไป"
+                  flutter_get_value_widget_should_be | json data | key_to_check = "description" | value_to_check = "Color(0xffabaca8)"
+                  flutter_get_value_widget_should_be | json data | key_to_check = "valueProperties" | value_to_check = {"red": 171,"green": 172,"blue": 168,"alpha": 255}
+                  flutter_get_value_widget_should_be | json data | key_to_check = "description" | value_to_check = Text-[<'billAndPayPayForOther/stickyButtonNextStep/chmButtonSet/chmButton/primary/textButton'>]
+        """    
+        result = self._flutter_check_widget_value_in_json(formatted_json, key_to_check, value_to_check)
+        return  (f"Inspecter results: {result}")
     
     def flutter_get_element_attribute(self, locator, attribute):
         """ *******Not available wait for update flutter*******
@@ -496,9 +510,9 @@ class ControlElement:
         source_norm = normalize('NFD', cache_app.get_source())
         return text_norm in source_norm
     
-    def _check_value_in_json(self,data, key, value):
+    def _flutter_check_widget_value_in_json(self,data, key, value):
         """
-        ตรวจสอบค่าของ key ใน JSON data
+        ตรวจสอบค่าของ key ใน JSON data ที่ได้จาก widget 
 
         :param data: JSON data ที่จะตรวจสอบ
         :param key: key ที่จะตรวจสอบ
@@ -510,10 +524,10 @@ class ControlElement:
                 if k == key and v == value:
                     return True
                 if isinstance(v, (dict, list)):
-                    if self._check_value_in_json(v, key, value):
+                    if self._flutter_check_widget_value_in_json(v, key, value):
                         return True
         elif isinstance(data, list):
             for item in data:
-                if self._check_value_in_json(item, key, value):
+                if self._flutter_check_widget_value_in_json(item, key, value):
                     return True
         return False

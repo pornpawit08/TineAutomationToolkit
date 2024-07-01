@@ -58,7 +58,7 @@ class DetectElement():
     
     def _find_by_key(self, application, element_key, tag, constraints):
         finder_key = detect_element.by_value_key(element_key)
-        element = FlutterDetectElement(application, finder_key)
+        element = FlutterDetectWidget(application, finder_key)
 
         return element
     
