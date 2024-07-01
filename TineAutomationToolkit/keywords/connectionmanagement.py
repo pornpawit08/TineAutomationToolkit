@@ -3,6 +3,7 @@
 import robot
 import inspect
 
+from appium import webdriver
 from robot.libraries.BuiltIn import BuiltIn
 from TineAutomationToolkit.utils.applicationcache import ApplicationCache
 from AppiumLibrary.keywords._logging import _LoggingKeywords
@@ -163,4 +164,15 @@ class ConnectionManagement:
                 return source
             else:
                 return ''
+            
+    def get_driver(self):
+        """
+        Connect Session(Don't Create New Session & )
+        """
+        current_app_caps = self._current_application()
+        driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities=current_app_caps, direct_connection=True)
+        return driver
+
+
+
         

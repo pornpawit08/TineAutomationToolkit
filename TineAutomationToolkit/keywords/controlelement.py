@@ -379,7 +379,7 @@ class ControlElement:
         ตัวอย่าง: หากคุณมี widget A ซึ่งมี widget ลูก B และ C, B มี widget ลูก D และ E และ C มี widget ลูก F, เมื่อตั้งค่าเป็น 2 คุณจะได้รับข้อมูลของ widget A, B, C, D, E, และ F
         """
         counterTextFinder = widget_finder.by_value_key(locator)
-        driver = cache_app._current_application
+        driver = cache_app.get_driver()
         diagnostics = driver.execute_script('flutter:getWidgetDiagnostics', counterTextFinder, { 'includeProperties': includeProperties, 'subtreeDepth': subtreeDepth })
         #json
         formatted_json = json.dumps(diagnostics, indent=2, ensure_ascii=False)
