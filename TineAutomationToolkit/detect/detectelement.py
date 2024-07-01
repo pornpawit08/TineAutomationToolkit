@@ -3,9 +3,9 @@
 from AppiumLibrary import utils
 from appium.webdriver.common.appiumby import AppiumBy
 from robot.api import logger
-from TineAutomationToolkit.detect.flutterfinderelement import FlutterDetectElement , FlutterFinderElement
+from TineAutomationToolkit.detect.flutterfinderwidget import FlutterDetectWidget , FlutterFinderWidget
 
-detect_element = FlutterFinderElement()
+detect_element = FlutterFinderWidget()
 # strategies = {
 #     'default': _find_by_default,
 #     'id': _find_by_id,

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-
+import json
 import ast
 
 from AppiumLibrary.locators import ElementFinder
+from TineAutomationToolkit.detect.flutterfinderwidget import FlutterDetectWidget , FlutterFinderWidget
 from AppiumLibrary.keywords._logging import _LoggingKeywords
 from .connectionmanagement import ConnectionManagement
 from selenium.webdriver.remote.webelement import WebElement
@@ -15,7 +16,8 @@ from unicodedata import normalize
 cache_app = ConnectionManagement()
 log = _LoggingKeywords()
 element_finder_t = ElementFinder()
-detect_element_finder = DetectElement()
+detect_widget_finder = DetectElement()
+widget_finder = FlutterFinderWidget()
 
 
 def isstr(s):
@@ -275,6 +277,19 @@ class ControlElement:
                           "in fact it was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
 
+    def native_element_should_be_visible(self , locator, loglevel='INFO'):
+        """Verifies that element identified with locator is visible.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+
+        New in AppiumLibrary 1.4.5
+        """
+        if not self._element_find_t(locator, True, True).is_displayed():
+            cache_app.log_source(loglevel)
+            raise AssertionError("Element '%s' should be visible "
+                                 "but did not" % locator)
+
     def native_is_keyboard_shown(self):
         """Return true if Android keyboard is displayed or False if not displayed
         No parameters are used.
@@ -329,6 +344,48 @@ class ControlElement:
         return self._element_find_t(locator, False, True)
 
     #Flutter (Not available , อยู่ในช่วงทดสอบ ยังไม่สามารถใช้งานได้)
+
+    def flutter_get_widget_diagnostic(self , locator ,subtreeDepth=2 , includeProperties=True):
+        """ Returns a JSON map of the DiagnosticsNode that is associated with the Widget identified by finder.
+        The subtreeDepth argument controls how many layers of children will be included in the result. It defaults to zero, which means that no children of the Widget identified by finder will be part of the result.
+        The includeProperties argument controls whether properties of the DiagnosticsNodes will be included in the result. It defaults to true.
+        Widgets describe configuration for the rendering tree. Individual widgets may create multiple RenderObjects to actually layout and paint the desired configuration.
+        
+        =========================================================
+        getWidgetDiagnostics method คือ เมธอดที่ใช้ในการดึงข้อมูลการวินิจฉัยหรือรายละเอียดต่าง ๆ ของ widget 
+        ที่ระบุในแอปพลิเคชัน Flutter โดยข้อมูลเหล่านี้จะเป็นข้อมูลเชิงลึกเกี่ยวกับสถานะและคุณสมบัติต่าง ๆ ของ widget
+        นั้น ๆ ซึ่งสามารถใช้ในการดีบักหรือวิเคราะห์การทำงานของ widget ได้
+
+        โครงสร้าง
+        Future<Map<String, Object?>> getWidgetDiagnostics(
+        SerializableFinder finder,
+        {int subtreeDepth = 0,
+        bool includeProperties = true,
+        Duration? timeout}
+        )
+        รายละเอียดเพิ่มเติม
+        ค่าของ subtreeDepth กำหนดว่าคุณต้องการดึงข้อมูลการวินิจฉัยจากโครงสร้างของ widget ลึกเท่าใด:
+
+        subtreeDepth = 0
+        ความหมาย: ดึงข้อมูลเฉพาะ widget ที่ระบุเท่านั้น ไม่รวม widget ลูกหรือ widget ที่อยู่ในโครงสร้างภายใน
+        ตัวอย่าง: หากคุณมี widget A ซึ่งมี widget ลูก B และ C, เมื่อตั้งค่าเป็น 0 คุณจะได้รับข้อมูลเฉพาะ widget A เท่านั้น
+
+        subtreeDepth = 1
+        ความหมาย: ดึงข้อมูลของ widget ที่ระบุรวมถึง widget ลูกในระดับแรก
+        ตัวอย่าง: หากคุณมี widget A ซึ่งมี widget ลูก B และ C, และ B มี widget ลูก D และ E, เมื่อตั้งค่าเป็น 1 คุณจะได้รับข้อมูลของ widget A, B, และ C แต่จะไม่รวม D และ E
+        
+        subtreeDepth = 2
+        ความหมาย: ดึงข้อมูลของ widget ที่ระบุรวมถึง widget ลูกในระดับที่สอง
+        ตัวอย่าง: หากคุณมี widget A ซึ่งมี widget ลูก B และ C, B มี widget ลูก D และ E และ C มี widget ลูก F, เมื่อตั้งค่าเป็น 2 คุณจะได้รับข้อมูลของ widget A, B, C, D, E, และ F
+        """
+        counterTextFinder = widget_finder.by_value_key(locator)
+        driver = cache_app._current_application
+        diagnostics = driver.execute_script('flutter:getWidgetDiagnostics', counterTextFinder, { 'includeProperties': includeProperties, 'subtreeDepth': subtreeDepth })
+        #json
+        formatted_json = json.dumps(diagnostics, indent=2, ensure_ascii=False)
+        return  formatted_json
+
+        
     
     def flutter_get_element_attribute(self, locator, attribute):
         """ *******Not available wait for update flutter*******
@@ -375,7 +432,7 @@ class ControlElement:
         elements = None
         if isstr(locator):
             _locator = locator
-            element = detect_element_finder.find_attribute(application , _locator , tag)
+            element = detect_widget_finder.find_attribute(application , _locator , tag)
             if required and len(elements) == 0:
                 raise ValueError("Element locator '" + locator + "' did not match any elements.")
             if first_only:
@@ -438,3 +495,25 @@ class ControlElement:
         text_norm = normalize('NFD', text)
         source_norm = normalize('NFD', cache_app.get_source())
         return text_norm in source_norm
+    
+    def _check_value_in_json(self,data, key, value):
+        """
+        ตรวจสอบค่าของ key ใน JSON data
+
+        :param data: JSON data ที่จะตรวจสอบ
+        :param key: key ที่จะตรวจสอบ
+        :param value: ค่าที่ต้องการเปรียบเทียบ
+        :return: True ถ้าพบ key และ value ตรงกัน, False ถ้าไม่พบ
+        """
+        if isinstance(data, dict):
+            for k, v in data.items():
+                if k == key and v == value:
+                    return True
+                if isinstance(v, (dict, list)):
+                    if self._check_value_in_json(v, key, value):
+                        return True
+        elif isinstance(data, list):
+            for item in data:
+                if self._check_value_in_json(item, key, value):
+                    return True
+        return False

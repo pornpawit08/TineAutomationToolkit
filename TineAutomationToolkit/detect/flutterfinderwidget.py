@@ -5,10 +5,10 @@ import json
 
 from appium.webdriver.webelement import WebElement
 
-class FlutterDetectElement(WebElement):
+class FlutterDetectWidget(WebElement):
     pass
 
-class FlutterFinderElement:
+class FlutterFinderWidget:
     def by_ancestor(self, serialized_finder, matching, match_root=False, first_match_only=False):
         return self._by_ancestor_or_descendant(
             type_='Ancestor',
