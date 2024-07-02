@@ -388,7 +388,7 @@ class ControlElement:
         return  formatted_json
 
     def flutter_get_value_widget_is_visible(self,formatted_json, key_to_check, value_to_check):
-        """ ********* (Not Support BrowserStack) **********
+        """ *********(FIXING) (Not Support BrowserStack) **********
         ตรวจสอบค่าของ key ใน JSON data และเทียบกับ value
         ว่าปรากฏใน JSON DATA หรือไม่
         
@@ -400,6 +400,24 @@ class ControlElement:
         """    
         result = self._flutter_check_widget_value_in_json(formatted_json, key_to_check, value_to_check)
         return  (f"Inspecter results: {result}")
+    
+    def flutter_get_properties_value_widget(self, data_json , name_value="description" ):
+        """ *********(Not Support BrowserStack) **********
+        JSON data ตรวจสอบและดึงค่าที่อยู่ใน properties ตามชื่อ name_value ที่ให้มา 
+        จากนั้นนำค่าเป็นเก็บเป็น array เพื่อเรียกใช้
+
+        data_json = ได้มากจาก flutter_get_widget_diagnostic
+        name_value = แต่ละ widget มีไม่เหมือนกันสามารถดูได้ จากข้อมูลที่ได้มากจาก flutter_get_widget_diagnostic
+        
+        example : flutter_get_properties_value_widget | json data | name_value = "description" 
+                  flutter_get_properties_value_widget | json data | name_value = "value" 
+                  flutter_get_properties_value_widget | json data | name_value = "level" 
+                  flutter_get_properties_value_widget | json data | name_value = "valueProperties" 
+                  flutter_get_properties_value_widget | json data | name_value = "red" 
+        """   
+        data = json.loads(data_json)
+        Results = [prop[name_value] for prop in data['properties']]
+        return  Results
     
     def flutter_get_element_attribute(self, locator, attribute):
         """ *******Not available wait for update flutter*******
