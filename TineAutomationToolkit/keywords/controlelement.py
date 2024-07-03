@@ -419,6 +419,146 @@ class ControlElement:
         Results = [prop[name_value] for prop in data['properties']]
         return  Results
     
+    def flutter_get_top_left_widget(self,locator,LoadList=True):
+        """ ********* Maybe Support BrowserStack  **********
+        Get Position Top Left Widget And Return
+
+        ===============================================
+
+        Get ค่ามุมบนซ้ายของ Widget นั้น
+        Locator = key ของ Widget นั้น หรือตำแหน่ง
+        LoadList หากต้องการให้ Return ออกเป็น List ให้ค่า LoadList = True แต่ถ้า LoadList=False จะได้ค่ารูปแบบ json.loads 
+        True : [('dx', 173.3056640625), ('dy', 679.3333333333334)]
+        False : {'dx': 173.3056640625, 'dy': 679.3333333333334}
+
+        Example : flutter_get_top_left_widget | locator | LoadList=True
+        """   
+        counterTextFinder = widget_finder.by_value_key(locator)
+        driver = cache_app._current_application()
+        topleft = driver.execute_script('flutter:getTopLeft',counterTextFinder)
+        #dump & load Json
+        json_data = json.dumps(topleft)
+        parsed_data = json.loads(json_data)
+        #LoadList
+        if LoadList == True :
+            data_list = list(parsed_data.items())
+        if LoadList == False:
+            data_list = parsed_data
+        #return
+        return  data_list
+    
+    def flutter_get_top_right_widget(self,locator,LoadList=True):
+        """ ********* Maybe Support BrowserStack  **********
+        Get Position Top Right Widget And Return
+
+        ===============================================
+
+        Get ค่ามุมบนขวาของ Widget นั้น
+        Locator = key ของ Widget นั้น หรือตำแหน่ง
+        LoadList หากต้องการให้ Return ออกเป็น List ให้ค่า LoadList = True แต่ถ้า LoadList=False จะได้ค่ารูปแบบ json.loads 
+        True : [('dx', 173.3056640625), ('dy', 679.3333333333334)]
+        False : {'dx': 173.3056640625, 'dy': 679.3333333333334}
+
+        Example : flutter_get_top_right_widget | locator | LoadList=True
+        """   
+        counterTextFinder = widget_finder.by_value_key(locator)
+        driver = cache_app._current_application()
+        topright = driver.execute_script('flutter:getTopRight',counterTextFinder)
+        #dump & load Json
+        json_data = json.dumps(topright)
+        parsed_data = json.loads(json_data)
+        #LoadList
+        if LoadList == True :
+            data_list = list(parsed_data.items())
+        if LoadList == False:
+            data_list = parsed_data
+        #return
+        return  data_list
+    
+    def flutter_get_bottom_left_widget(self,locator,LoadList=True):
+        """ ********* Maybe Support BrowserStack  **********
+        Get Position Bottom Left Widget And Return
+
+        ===============================================
+
+        Get ค่ามุมล่างซ้ายของ Widget นั้น
+        Locator = key ของ Widget นั้น หรือตำแหน่ง
+        LoadList หากต้องการให้ Return ออกเป็น List ให้ค่า LoadList = True แต่ถ้า LoadList=False จะได้ค่ารูปแบบ json.loads 
+        True : [('dx', 173.3056640625), ('dy', 679.3333333333334)]
+        False : {'dx': 173.3056640625, 'dy': 679.3333333333334}
+
+        Example : flutter_get_bottom_left_widget | locator | LoadList=True
+        """   
+        counterTextFinder = widget_finder.by_value_key(locator)
+        driver = cache_app._current_application()
+        bottomleft = driver.execute_script('flutter:getBottomLeft',counterTextFinder)
+        #dump & load Json
+        json_data = json.dumps(bottomleft)
+        parsed_data = json.loads(json_data)
+        #LoadList
+        if LoadList == True :
+            data_list = list(parsed_data.items())
+        if LoadList == False:
+            data_list = parsed_data
+        #return
+        return  data_list
+    
+    def flutter_get_bottom_right_widget(self,locator,LoadList=True):
+        """ ********* Maybe Support BrowserStack  **********
+        Get Position Bottom Right Widget And Return
+
+        ===============================================
+
+        Get ค่ามุมล่างขวาของ Widget นั้น
+        Locator = key ของ Widget นั้น หรือตำแหน่ง
+        LoadList หากต้องการให้ Return ออกเป็น List ให้ค่า LoadList = True แต่ถ้า LoadList=False จะได้ค่ารูปแบบ json.loads 
+        True : [('dx', 173.3056640625), ('dy', 679.3333333333334)]
+        False : {'dx': 173.3056640625, 'dy': 679.3333333333334}
+
+        Example : flutter_get_bottom_right_widget | locator | LoadList=True
+        """   
+        counterTextFinder = widget_finder.by_value_key(locator)
+        driver = cache_app._current_application()
+        bottomright = driver.execute_script('flutter:getBottomRight',counterTextFinder)
+        #dump & load Json
+        json_data = json.dumps(bottomright)
+        parsed_data = json.loads(json_data)
+        #LoadList
+        if LoadList == True :
+            data_list = list(parsed_data.items())
+        if LoadList == False:
+            data_list = parsed_data
+        #return
+        return  data_list
+    
+    def flutter_get_center_widget(self,locator,LoadList=True):
+        """ ********* Maybe Support BrowserStack  **********
+        Get Position Center Widget And Return
+
+        ===============================================
+
+        Get ค่ากึ่งกลางของ Widget นั้น
+        Locator = key ของ Widget นั้น หรือตำแหน่ง
+        LoadList หากต้องการให้ Return ออกเป็น List ให้ค่า LoadList = True แต่ถ้า LoadList=False จะได้ค่ารูปแบบ json.loads 
+        True : [('dx', 173.3056640625), ('dy', 679.3333333333334)]
+        False : {'dx': 173.3056640625, 'dy': 679.3333333333334}
+
+        Example : flutter_get_center_widget | locator | LoadList=True
+        """   
+        counterTextFinder = widget_finder.by_value_key(locator)
+        driver = cache_app._current_application()
+        center = driver.execute_script('flutter:getCenter',counterTextFinder)
+        #dump & load Json
+        json_data = json.dumps(center)
+        parsed_data = json.loads(json_data)
+        #LoadList
+        if LoadList == True :
+            data_list = list(parsed_data.items())
+        if LoadList == False:
+            data_list = parsed_data
+        #return
+        return  data_list
+    
     def flutter_get_element_attribute(self, locator, attribute):
         """ *******Not available wait for update flutter*******
 
