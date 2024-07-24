@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="TineAutomationToolkit",
-    version="1.2.3",
+    version="1.2.4",
     author="Pornpawit Suttha",
     author_email="pornpawit14suttha@gmail.com",
     description="Test Library for TineAutomationToolkit",
@@ -13,6 +13,10 @@ setup(
     install_requires=[
         'robotframework>=3.0',
         'pytz',
+        'numpy',
+        'pillow',
+        'opencv-python',
+        'matplotlib'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

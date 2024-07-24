@@ -11,7 +11,8 @@ class TineAutomationToolkit(
     CaptureScreenShot,
     KeyEvent,
     Touch,
-    ConvertObject
+    ConvertObject,
+    ImageProcessing
     ):
 
     def __init__(self):

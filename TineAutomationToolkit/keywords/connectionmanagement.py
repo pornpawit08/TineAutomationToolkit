@@ -203,10 +203,10 @@ class ConnectionManagement:
     def send_session_status_to_browserstack(self):
         """
         ***|    Description     |***
-        |   *`XSend Status To BrowserStack`*   |   ส่งสถานะและข้อความไปยัง BrowserStack ตาม session_id, status, และ message ที่กำหนด |
+        |   *`Send Session Status To BrowserStack`*   |   ส่งสถานะและข้อความไปยัง BrowserStack ตาม session_id, status, และ message ที่กำหนด |
  
         ***|    Example     |***
-        | *`XSend Status To BrowserStack`* |
+        | *`Send Session Status To BrowserStack`* |
  
         ***|    Parameters     |***
         - ไม่มีพารามิเตอร์
