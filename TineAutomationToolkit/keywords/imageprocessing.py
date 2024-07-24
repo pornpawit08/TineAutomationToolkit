@@ -101,7 +101,7 @@ class ImageProcessing:
  
         ***|    Example     |***
         | *`Highlight Contours Objects`* | image_path = path | contours = data filtered_contours | indices  = [array or list contours]
-        | *`Highlight Contours Objects`* | image_path = C/domain/log.png | contours = data filtered_contours | indices  = [0] 
+        | *`Highlight Contours Objects`* | image_path = C/domain/log.png | contours = data filtered_contours | indices  = 0 
 
         ***|    Parameters     |***
         -  image_path
@@ -113,6 +113,7 @@ class ImageProcessing:
         #read image with cv2.imread
         image = cv2.imread(image_path)
         image_old = cv2.imread(image_path)
+        indices = [int(indices)]
         # Draw specified contours on the image with different colors
         for index in indices:
             color = (0, 0, 255)
