@@ -3,8 +3,11 @@
 import cv2
 import numpy as np
 import matplotlib.colors as mcolors
+import io
+import base64
 
 from PIL import Image
+from robot.libraries.BuiltIn import BuiltIn
 
 
 class ImageProcessing:
@@ -32,7 +35,7 @@ class ImageProcessing:
         """
         #read image with cv2.imread
         image = cv2.imread(image_path)
-
+        image_old = cv2.imread(image_path)
         # Convert image to HSV color space
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
@@ -61,8 +64,30 @@ class ImageProcessing:
             # Convert image back to PIL format  | หากต้องการดูรูปให้เปิด image_pil.show()  | COLOR_BGR2RGB , cv2.COLOR_BGR2RGB , cv2.COLOR_HSV2RGB
             # image_pil = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))   #(กรณีทดสอบดูรูปแรกสุด)
             # image_pil.show()
-            image_pil = Image.fromarray(image)
+            image_new_pil = Image.fromarray(image)
             # image_pil.show()
+
+            # แปลงภาพ PIL เป็น base64
+            image_old_pil = Image.fromarray(cv2.cvtColor(image_old, cv2.COLOR_BGR2RGB))
+            buffered_old = io.BytesIO()
+            image_old_pil.save(buffered_old, format="PNG")
+            old_image_base64 = base64.b64encode(buffered_old.getvalue()).decode('utf-8')
+
+            buffered_new = io.BytesIO()
+            image_new_pil.save(buffered_new, format="PNG")
+            new_image_base64 = base64.b64encode(buffered_new.getvalue()).decode('utf-8')
+
+            #แสดงผลบน log.html 
+            BuiltIn().log(f'''
+            <table>
+                <tr>
+                    <td style="padding-right: 35px;"><h3>Old Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
+                    <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#11162;</h2></td>
+                    <td><h3>New Image:</h3><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
+                </tr>
+            </table>
+            ''', html=True)
+
 
             return  len(filtered_contours) , filtered_contours
         
@@ -82,24 +107,43 @@ class ImageProcessing:
         -  image_path
         -  contours (data filtered_contours ที่ได้จาก keyword : 'Detect And Mask Objects')
         -  indices (array or list ของตัวที่ต้องการ ภายใน data filtered_contours )
-
- 
  
         *`ทดสอบได้เฉพาะบางหน้าเท่านั้น ค่าบางค่าอาจเอาออกมาไม่ได้เนื่องจากขนาดใหญ่เกินไป`*
         """
         #read image with cv2.imread
         image = cv2.imread(image_path)
-
+        image_old = cv2.imread(image_path)
         # Draw specified contours on the image with different colors
         for index in indices:
             color = (0, 0, 255)
             result_image = cv2.drawContours(image, contours, index, color, 3)
 
         # Convert image back to PIL format
-        result_image = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+        image_new_pil = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
         # result_image.show()
 
-        return result_image
+        # แปลงภาพ PIL เป็น base64
+        image_old_pil = Image.fromarray(cv2.cvtColor(image_old, cv2.COLOR_BGR2RGB))
+        buffered_old = io.BytesIO()
+        image_old_pil.save(buffered_old, format="PNG")
+        old_image_base64 = base64.b64encode(buffered_old.getvalue()).decode('utf-8')
+
+        buffered_new = io.BytesIO()
+        image_new_pil.save(buffered_new, format="PNG")
+        new_image_base64 = base64.b64encode(buffered_new.getvalue()).decode('utf-8')
+
+        #แสดงผลบน log.html 
+        BuiltIn().log(f'''
+            <table>
+                <tr>
+                    <td style="padding-right: 35px;"><h3>Old Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
+                    <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#11162;</h2></td>
+                    <td><h3>New Image:</h3><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
+                </tr>
+            </table>
+        ''', html=True)
+
+        return image_new_pil
 
     def get_average_bgr_color_within_contour(self, image_path , contour):
         """
@@ -117,7 +161,7 @@ class ImageProcessing:
         """
         #read image with cv2.imread
         image = cv2.imread(image_path)
-
+        image_old = cv2.imread(image_path)
         # สร้าง mask ที่มีขนาดเท่ากับภาพ โดยมีค่าเริ่มต้นเป็นสีดำ (ค่า 0)
         mask = np.zeros(image.shape[:2], dtype=np.uint8)
 
@@ -129,8 +173,29 @@ class ImageProcessing:
 
         # Convert image back to PIL format
         # result_image = Image.fromarray(cv2.cvtColor(draw, cv2.COLOR_BGR2RGB))
-        result_image = Image.fromarray(draw)
+        image_new_pil = Image.fromarray(draw)
         # result_image.show()
+
+        # แปลงภาพ PIL เป็น base64
+        image_old_pil = Image.fromarray(cv2.cvtColor(image_old, cv2.COLOR_BGR2RGB))
+        buffered_old = io.BytesIO()
+        image_old_pil.save(buffered_old, format="PNG")
+        old_image_base64 = base64.b64encode(buffered_old.getvalue()).decode('utf-8')
+
+        buffered_new = io.BytesIO()
+        image_new_pil.save(buffered_new, format="PNG")
+        new_image_base64 = base64.b64encode(buffered_new.getvalue()).decode('utf-8')
+
+        #แสดงผลบน log.html
+        BuiltIn().log(f'''
+            <table>
+                <tr>
+                    <td style="padding-right: 35px;"><h3>Old Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
+                    <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#11162;</h2></td>
+                    <td><h3>New Image:</h3><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
+                </tr>
+            </table>
+        ''', html=True)
 
         return mean_color
     
@@ -193,7 +258,23 @@ class ImageProcessing:
 
         #ส่งคืนชื่อสีและค่า hex ของสีที่ใกล้เคียงที่สุด
         return closest_name , closest_hex
+    
+    def replace_capture_path(self, path ):
+        """
+        ***|    Description     |***
+        |   *`Replace Capture Path`*   |   ส่ง path ที่ได้จากการ capture screen เข้ามา replace \\ เป็น / |
+ 
+        ***|    Example     |***
+        | *`Replace Capture Path`* | path = C\domain\log.png 
 
+        ***|    Parameters     |***
+        -  path  (ค่า path ที่ได้จาก Keyword : 'Capture Screen ของ AppiumFlutter หรือ Appium')
+
+        *`.....`*
+        """
+        newpath = path.replace("\\", "/")
+
+        return  newpath
 
 
     
