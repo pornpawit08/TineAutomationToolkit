@@ -15,7 +15,7 @@ class ImageProcessing:
         pass
     #KeyWord
 
-    def detect_and_mask_objects(self, image_path , contour_area = 50, color = 'green' ):
+    def detect_and_mask_objects(self, image_path , contour_area = None, hsv_array_lower = None, hsv_array_upper = None):
         """
         ***|    Description     |***
         |   *`Detect And Mask Objects`*   |   ส่ง path รูปภาพ และ สี เพื่อไป mask object ที่เป็นสีดังกล่าวภายในภาพ |
@@ -28,26 +28,36 @@ class ImageProcessing:
         -  color (ณ ปัจจุบัน มีให้ทดสอบเฉพาะ color = green)
         -  contour_area (Minimum area to consider a contour valid | หากสนใจพวกเส้นหรือตัวอักษร min_contour_area = 50-100 
         หรือหากสนใจสิ่งที่ใหญ่กว่าเช่นกรอบหรือกล่อง Text Field ให้ min_contour_area = 3500 - 5000++)
-
- 
+        -  hsv_array_lower ค่า min hsv 
+        -  hsv_array_upper ค่า max hsv
  
         *`ทดสอบได้เฉพาะบางหน้าเท่านั้น บางรูปอาจจะไม่สามารถจับ mask ต้องกำหนดค่าเฉพาะ`*
         """
+        if contour_area == None or hsv_array_lower == None or hsv_array_upper == None:
+            raise ValueError("Error Argument contour_area or hsv_array_lower or hsv_array_upper is None ")
         #read image with cv2.imread
         image = cv2.imread(image_path)
         image_old = cv2.imread(image_path)
         # Convert image to HSV color space
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        
+        #np set hsv lower , upper
+        h_lower = hsv_array_lower[0]
+        s_lower = hsv_array_lower[1]
+        v_lower = hsv_array_lower[2]
+        h_upper = hsv_array_upper[0]
+        s_upper = hsv_array_upper[1]
+        v_upper = hsv_array_upper[2]
 
         # Define the green color range for the mask
         lower_color = None
         upper_color = None
-        if color == 'green':
-            lower_green = np.array([35, 50, 50])
-            upper_green = np.array([85, 255, 255])
+        if contour_area != None and hsv_array_lower != None and hsv_array_upper != None:
+            lower_color = np.array([h_lower, s_lower, v_lower])
+            upper_color = np.array([h_upper, s_upper, v_upper])
 
             # Create the mask
-            mask = cv2.inRange(hsv,lower_green,upper_green)
+            mask = cv2.inRange(hsv,lower_color,upper_color)
 
             # Find contours in the binary image
             contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -91,8 +101,7 @@ class ImageProcessing:
 
             return  len(filtered_contours) , filtered_contours
         
-        if color != 'green':
-            return  'Error color'
+        
         
     def highlight_contours_objects(self, image_path , contours, indices):
         """
@@ -227,6 +236,39 @@ class ImageProcessing:
         average_color_rgb = average_color_rgb_array.flatten()
 
         return  average_color_rgb
+    
+    def convert_rgb_2_hsv(self, Red , Green , Blue ):
+        """
+        ***|    Description     |***
+        |   *`Convert RGB 2 HSV`*   |   ส่ง Red , Green , Blue เพื่อไปแปลงเป็น เป็น  HSV (โดยค่า rgb สามารถหาได้จากการ
+        นำรูปภาพไปเข้าเว็บ rgb Image เพื่อหาสีที่เราต้องการ https://imagecolorpicker.com/th or https://www.ginifab.com/feeds/pms/color_picker_from_image.th.php)
+
+        ***|    Example     |***
+        | *`Convert RGB 2 HSV`* | Red = 10 | Green = 10 | Blue = 10
+
+        ***|    Parameters     |***
+        -  Red (สีแดง)
+        -  Green (สีเขียว)
+        -  Blue (สีฟ้า)
+
+        *`.....`*
+        """
+        # สี RGB
+        rgb_color = np.uint8([[[Red, Green, Blue]]])
+
+        # แปลงจาก RGB เป็น HSV
+        hsv_color = cv2.cvtColor(rgb_color, cv2.COLOR_RGB2HSV)
+
+        #reshape(-1) จะทำการแปลง array ให้เป็น array หนึ่งมิติ
+        hsv_array = hsv_color.reshape(-1)
+
+        h = hsv_array[0]
+        s = hsv_array[1]
+        v = hsv_array[2]
+
+        hsv_array = [int(h),int(s),int(v)]
+
+        return  hsv_array
 
     def rgb_2_matplotlib_color_name_and_hex(self, rgb_tuple ):
         """
