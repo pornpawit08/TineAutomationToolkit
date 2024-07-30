@@ -125,22 +125,6 @@ class ConnectionManagement:
         driver.install_app(app_path)
         return driver.is_app_installed(app_package)
     
-    
-    
-    #PRIVATE_FUNCTION
-        
-    def _current_application(self):
-        """Return the instance of the current application
-        From AppiumFlutterLibrary
-
-        =========================================================
-
-        คืนค่าอินสแตนซ์ของแอปพลิเคชันปัจจุบัน
-        จาก AppiumFlutterLibrary
-        """
-        return cache_app.get_library_instance('AppiumFlutterLibrary')._current_application()
-        # return self._bi.get_library_instance('AppiumFlutterLibrary')._current_application()
-
     def get_source(self):
         """Returns the entire source of the current page.
         
@@ -266,6 +250,27 @@ class ConnectionManagement:
             logging.info(f"Successfully sent status to BrowserStack: {status}, {message}")
         else:
             logging.error(f"Failed to send status to BrowserStack: {response.status_code}, {response.content}")
+
+    #PRIVATE_FUNCTION
+        
+    def _current_application(self):
+        """Return the instance of the current application
+        From AppiumFlutterLibrary
+
+        =========================================================
+
+        คืนค่าอินสแตนซ์ของแอปพลิเคชันปัจจุบัน
+        จาก AppiumFlutterLibrary
+        """
+        return cache_app.get_library_instance('AppiumFlutterLibrary')._current_application()
+        # return self._bi.get_library_instance('AppiumFlutterLibrary')._current_application()
+
+    def _get_platform(self):
+        try:
+            platform_name = self._current_application().desired_capabilities['platformName']
+        except Exception as e:
+            raise e
+        return platform_name.lower()
 
 
         
