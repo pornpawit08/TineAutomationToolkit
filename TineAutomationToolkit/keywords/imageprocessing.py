@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.colors as mcolors
 import io
 import base64
+import os
 
 from PIL import Image
 from robot.libraries.BuiltIn import BuiltIn
@@ -318,6 +319,80 @@ class ImageProcessing:
         newpath = path.replace("\\", "/")
 
         return  newpath
+    
+    def crop_image(self, left:int, top:int, right:int, bottom:int, image_path: str):
+        imgold = Image.open(image_path)
+        imgnew = Image.open(image_path)
+        crop_img = imgnew.crop((left, top, right, bottom))
+        # crop_img.show()
+        buffered_old = io.BytesIO()
+        imgold.save(buffered_old, format="PNG")
+        old_image_base64 = base64.b64encode(buffered_old.getvalue()).decode('utf-8')
+
+        buffered_new = io.BytesIO()
+        imgnew.save(buffered_new, format="PNG")
+        new_image_base64 = base64.b64encode(buffered_new.getvalue()).decode('utf-8')
+
+        #แสดงผลบน log.html
+        BuiltIn().log(f'''
+            <table>
+                <tr>
+                    <td style="padding-right: 35px;"><h3>Old Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
+                    <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#11162;</h2></td>
+                    <td><h3>New Image:</h3><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
+                </tr>
+            </table>
+        ''', html=True)
+
+        return crop_img
+    
+    def compare_images(self , crop_img , path_img_compare):
+        np_image_crop = np.array(crop_img)
+        compare_img = Image.open(path_img_compare)
+        np_image_compare = np.array(compare_img)
+
+        #แปลง PIL เป็น base 64 
+        buffered_old = io.BytesIO()
+        crop_img.save(buffered_old, format="PNG")
+        old_image_base64 = base64.b64encode(buffered_old.getvalue()).decode('utf-8')
+
+        buffered_new = io.BytesIO()
+        compare_img.save(buffered_new, format="PNG")
+        new_image_base64 = base64.b64encode(buffered_new.getvalue()).decode('utf-8')
+
+        # Check if shapes of the two images are same
+        if np_image_crop.shape == np_image_compare.shape:
+            # Compare pixel by pixel
+            if np.array_equal(np_image_crop, np_image_compare):
+                BuiltIn().log('The images are exactly the same.')
+                BuiltIn().log(f'''
+                    <table>
+                        <tr>
+                            <td style="padding-right: 35px;"><h3>Actual Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
+                            <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#8801;</h2></td>
+                            <td><h3>Expect Image:</h3><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
+                        </tr>
+                    </table>
+                ''', html=True)
+            else:
+                BuiltIn().log(f'''
+                    <table>
+                        <tr>
+                            <td style="padding-right: 35px;"><h3>Actual Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
+                            <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#8802;</h2></td>
+                            <td><h3>Expect Image:</h3><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
+                        </tr>
+                    </table>
+                ''', html=True)
+                BuiltIn().run_keyword('Fail','The images are different.')
+        else:
+            BuiltIn().run_keyword('Fail','The images have different sizes and cannot be compared directly.')
+
+    def find_fullpath_with_filename(self,filename:str,search_path:str):
+        for root, dirs, files in os.walk(search_path):
+            if filename in files:
+                return os.path.join(root, filename)
+        return None
 
 
     
