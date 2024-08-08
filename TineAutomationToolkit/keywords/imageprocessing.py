@@ -394,5 +394,19 @@ class ImageProcessing:
                 return os.path.join(root, filename)
         return None
 
+    def save_image_on_directory(self,image,saveonpath):
+        #Check isinstance PIL
+        if self._is_pil_image(image):
+            BuiltIn().log('This is a PIL Image object.')
+            image.save(saveonpath)
+            BuiltIn().log(f'Success Save Image On Path : {saveonpath}')
+        else:
+            BuiltIn().run_keyword('Fail','This is not a PIL Image object.')
+
+    #PRIVATE_FUNCTION
+    
+    def _is_pil_image(self,obj):
+            return isinstance(obj, Image.Image)
+        
 
     
