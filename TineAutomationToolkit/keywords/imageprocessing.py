@@ -337,9 +337,10 @@ class ImageProcessing:
         BuiltIn().log(f'''
             <table>
                 <tr>
-                    <td style="padding-right: 35px;"><h3>Old Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
-                    <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#11162;</h2></td>
-                    <td><h3>New Image:</h3><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
+                    <td style="padding-right: 35px;"><h3>Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
+                    <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#61;</h2></td>
+                    <td style="padding-left: 35px;"><h3>Crop Image:</h3></td>
+                    <td style="text-align: center; vertical-align: middle;"><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
                 </tr>
             </table>
         ''', html=True)
@@ -369,7 +370,7 @@ class ImageProcessing:
                     <table>
                         <tr>
                             <td style="padding-right: 35px;"><h3>Actual Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
-                            <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#8801;</h2></td>
+                            <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#61;</h2></td>
                             <td><h3>Expect Image:</h3><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
                         </tr>
                     </table>
@@ -379,13 +380,23 @@ class ImageProcessing:
                     <table>
                         <tr>
                             <td style="padding-right: 35px;"><h3>Actual Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
-                            <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#8802;</h2></td>
+                            <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#8800;</h2></td>
                             <td><h3>Expect Image:</h3><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
                         </tr>
                     </table>
                 ''', html=True)
                 BuiltIn().run_keyword('Fail','The images are different.')
         else:
+            BuiltIn().log(f'''
+                <table>
+                    <tr>
+                        <td style="padding-right: 35px;"><h3>Old Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
+                        <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#8800;</h2></td>
+                        <td style="padding-left: 35px;"><h3>test Image:</h3></td>
+                        <td style="text-align: center; vertical-align: middle;"><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
+                    </tr>
+                </table>
+            ''', html=True)
             BuiltIn().run_keyword('Fail','The images have different sizes and cannot be compared directly.')
 
     def find_fullpath_with_filename(self,filename:str,search_path:str):
@@ -398,6 +409,9 @@ class ImageProcessing:
         #Check isinstance PIL
         if self._is_pil_image(image):
             BuiltIn().log('This is a PIL Image object.')
+            BuiltIn().log(f'Size: {image.size}')
+            BuiltIn().log(f'Format: {image.format}')
+            BuiltIn().log(f'Mode: {image.mode}')
             image.save(saveonpath)
             BuiltIn().log(f'Success Save Image On Path : {saveonpath}')
         else:
