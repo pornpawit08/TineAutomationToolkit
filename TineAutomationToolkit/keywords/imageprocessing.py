@@ -326,7 +326,7 @@ class ImageProcessing:
         crop_img = imgnew.crop((left, top, right, bottom))
         # crop_img.show()
         buffered_old = io.BytesIO()
-        imgold.save(buffered_old, format="PNG")
+        crop_img.save(buffered_old, format="PNG")
         old_image_base64 = base64.b64encode(buffered_old.getvalue()).decode('utf-8')
 
         buffered_new = io.BytesIO()
