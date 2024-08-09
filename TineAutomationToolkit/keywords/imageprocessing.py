@@ -469,7 +469,7 @@ class ImageProcessing:
         old_image_base64 = base64.b64encode(buffered_old.getvalue()).decode('utf-8')
 
         buffered_new = io.BytesIO()
-        image_compare.save(buffered_new, format="PNG")
+        compare_img.save(buffered_new, format="PNG")
         new_image_base64 = base64.b64encode(buffered_new.getvalue()).decode('utf-8')
 
 
