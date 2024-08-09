@@ -348,6 +348,20 @@ class ImageProcessing:
         return crop_img
     
     def compare_images(self , crop_img , path_img_compare):
+        """
+        ***|    Description     |***
+        |   *`Compare Images`*   |   ส่ง path รูปภาพ crop_img และ path_img_compare,
+        เพื่อไปคำนวณค่าความแตกต่างของภาพ โดยหาก np.array ในตั้ง 2 ภาพเท่ากัน จะ pass
+ 
+        ***|    Example     |***
+        | *`Compare Images`* | crop_img  | path_img_compare | fail_threshold (default= 5)
+
+        ***|    Parameters     |***
+        -  crop_img (img ที่ได้จากการ crop แล้วจาก  def crop_image (type file PIL))
+        -  path_img_compare  (path ที่เก็บรูปที่ไว้ตรวจสอบ)
+
+        *`หากทดสอบใน ต่างรุ่นโทรศัพจะ Fail`*
+        """
         np_image_crop = np.array(crop_img)
         compare_img = Image.open(path_img_compare)
         np_image_compare = np.array(compare_img)
@@ -390,9 +404,9 @@ class ImageProcessing:
             BuiltIn().log(f'''
                 <table>
                     <tr>
-                        <td style="padding-right: 35px;"><h3>Old Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
+                        <td style="padding-right: 35px;"><h3>Actual Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
                         <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#8800;</h2></td>
-                        <td style="padding-left: 35px;"><h3>test Image:</h3></td>
+                        <td style="padding-left: 35px;"><h3>Expect Image:</h3></td>
                         <td style="text-align: center; vertical-align: middle;"><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
                     </tr>
                 </table>
@@ -416,6 +430,98 @@ class ImageProcessing:
             BuiltIn().log(f'Success Save Image On Path : {saveonpath}')
         else:
             BuiltIn().run_keyword('Fail','This is not a PIL Image object.')
+
+    def compare_images_percent(self , path_img_actual:str , path_img_compare:str ,fail_threshold:int=5):
+        """
+        ***|    Description     |***
+        |   *`Compare Images Percent`*   |   ส่ง path รูปภาพ actual และ compare, fail_threshold ค่าที่ยอมรับ 
+        เพื่อไปคำนวณค่าความแตกต่างของภาพ หากค่าที่ได้มากกว่า fail_threshold ที่ให้ไปจะ fail
+ 
+        ***|    Example     |***
+        | *`Compare Images Percent`* | path_img_actual  | path_img_compare | fail_threshold (default= 5)
+
+        ***|    Parameters     |***
+        -  path_img_compare (path ที่เก็บรูป compare)
+        -  path_img_actual  (path ที่เก็บรูปที่จะทดสอบ)
+        -  fail_threshold (ค่าที่ยอบรับความต่างภาพ)
+
+        ***|    Doc     |***
+        -  difference (ตัวแปรนี้เก็บค่าความแตกต่างของภาพจากฟังก์ชัน cv2.absdiff() ซึ่งคำนวณความแตกต่างแบบแอบโซลูตระหว่างสองภาพ.)
+        -  gray_difference (ตัวแปรนี้เก็บภาพความแตกต่างที่ถูกแปลงเป็นภาพสีเทา (cv2.cvtColor()) เพื่อลดความซับซ้อนในการประมวลผลต่อไป.)
+        -  threshold_value, thresh  (threshold_value คือค่าเกณฑ์ที่ใช้ในการแยกพิกเซลที่แตกต่างออกจากภาพความแตกต่าง. thresh คือภาพที่ได้จากการใช้เกณฑ์นี้ซึ่งแสดงพิกเซลที่แตกต่างชัดเจน.)
+        -  num_diff_pixels (ตัวแปรนี้เก็บจำนวนพิกเซลที่ถูกตัดสินว่าแตกต่างกันอย่างชัดเจนหลังจากใช้เกณฑ์.)
+        -  total_pixels, percentage_difference (total_pixels คือจำนวนพิกเซลทั้งหมดใน thresh. percentage_difference คือเปอร์เซ็นต์ของพิกเซลที่แตกต่างกันเมื่อเทียบกับจำนวนพิกเซลทั้งหมด.)
+        -  fail_threshold   (เกณฑ์ที่ใช้ตัดสินว่าภาพแตกต่างกันมากเพียงใดจึงจะถือว่าการเปรียบเทียบล้มเหลว.)
+        
+        *`หากทดสอบใน ต่างรุ่นโทรศัพ อาจเกิด ค่าความแตกต่างของภาพที่มาก`*
+        """
+        #ใช้สำหรับประมวลตวามต่าง
+        image_actual = cv2.imread(path_img_actual)
+        image_compare = cv2.imread(path_img_compare)
+        
+
+        #ใช้แสดงรูป
+        actual_img = Image.open(path_img_actual)
+        compare_img = Image.open(path_img_compare)
+        #แปลง PIL เป็น base 64 
+        buffered_old = io.BytesIO()
+        actual_img.save(buffered_old, format="PNG")
+        old_image_base64 = base64.b64encode(buffered_old.getvalue()).decode('utf-8')
+
+        buffered_new = io.BytesIO()
+        image_compare.save(buffered_new, format="PNG")
+        new_image_base64 = base64.b64encode(buffered_new.getvalue()).decode('utf-8')
+
+
+        # ตรวจสอบขนาดภาพ และปรับให้เท่ากัน
+        if image_actual.shape != image_compare.shape:
+            # ปรับขนาด image2 ให้เท่ากับ image1
+            image_compare = cv2.resize(image_compare, (image_actual.shape[1], image_actual.shape[0]))
+
+        # คำนวณความแตกต่างของภาพ
+        difference = cv2.absdiff(image_actual, image_compare)
+
+        # แปลงภาพความแตกต่างเป็นภาพสีเทา
+        gray_difference = cv2.cvtColor(difference, cv2.COLOR_BGR2GRAY)
+
+        # ตั้งค่าความต่างที่ถือว่ายอมรับได้ (เกณฑ์)
+        threshold_value = 30  # กำหนดเกณฑ์ความต่างที่ยอมรับได้
+
+        # ทำ threshold เพื่อแยกพิกเซลที่แตกต่างกันอย่างเห็นได้ชัด
+        _, thresh = cv2.threshold(gray_difference, threshold_value, 255, cv2.THRESH_BINARY)
+
+        # คำนวณจำนวนพิกเซลที่แตกต่างกัน
+        num_diff_pixels = np.count_nonzero(thresh)
+
+        # คำนวณเปอร์เซ็นต์ของพิกเซลที่แตกต่างกัน
+        total_pixels = thresh.size
+        percentage_difference = (num_diff_pixels / total_pixels) * 100
+
+        fail_thresholdFix = fail_threshold  # เกณฑ์ความแตกต่างที่ยอมรับได้ 5% (defual = 5 %)
+        if percentage_difference > fail_thresholdFix:
+            BuiltIn().log('Test fail: The image difference is too high.')
+            BuiltIn().log(f'''
+                    <table>
+                        <tr>
+                            <td style="padding-right: 35px;"><h3>Actual Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
+                            <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#8800;</h2></td>
+                            <td><h3>Expect Image:</h3><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
+                        </tr>
+                    </table>
+            ''', html=True)
+            BuiltIn().run_keyword('Fail',f'Percentage difference: {percentage_difference:.2f}% More Than Fail threshold : {fail_thresholdFix:.2f}')
+        else:
+            BuiltIn().log('Test pass: The images are considered similar.')
+            BuiltIn().log(f"Percentage difference: {percentage_difference:.2f}% Less Than Fail threshold : {fail_thresholdFix:.2f}")
+            BuiltIn().log(f'''
+                    <table>
+                        <tr>
+                            <td style="padding-right: 35px;"><h3>Actual Image:</h3><img src="data:image/png;base64,{old_image_base64}" width="400px"></td>
+                            <td style="padding-right: 35px; text-align: center; vertical-align: middle;"><h2 style="font-size: 125px; color: green;">&#61;</h2></td>
+                            <td><h3>Expect Image:</h3><img src="data:image/png;base64,{new_image_base64}" width="400px"></td>
+                        </tr>
+                    </table>
+            ''', html=True)
 
     #PRIVATE_FUNCTION
     
