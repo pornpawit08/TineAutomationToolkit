@@ -27,7 +27,7 @@ def isstr(s):
 class ControlElement:
 
     def __init__(self):
-        self._status_mode = 'FLUTTER'
+        pass
          #เนื่องจากปัญหาเรื่องโครงสร้าง structure เลยยังไม่สามารถใช้ได้
         # self._element_finder_t = ElementFinder()
         # self._co = ConnectionManagement()

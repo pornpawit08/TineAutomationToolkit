@@ -5,16 +5,14 @@ import robot
 
 from .connectionmanagement import ConnectionManagement
 from AppiumLibrary.keywords._logging import _LoggingKeywords
-from AppiumFlutterLibrary.keywords._screen import _ScreenKeywords
 
 cache_app = ConnectionManagement()
 log = _LoggingKeywords()
-screen_instance = _ScreenKeywords()
 
 class CaptureScreenShot:
 
     def __init__(self):
-        self._screenshot_index = 0
+        pass
     
     #KeyWord
 
@@ -83,17 +81,12 @@ class CaptureScreenShot:
         
     def _get_screenshot_paths(self, filename):
         if not filename:
-            screenshot_index_value = getattr(screen_instance, '_screenshot_index', None)
-            print('getattr')
-            print(screenshot_index_value)
-            self._screenshot_index = screenshot_index_value+1
-            filename = 'appiumflutter-screenshot-%d.png' % self._screenshot_index
-            setattr(screen_instance, '_screenshot_index', self._screenshot_index)
-            print('setattr')
-            print(self._screenshot_index)
+            self._screenshot_indexs += 1
+            filename = 'appium-screenshot-%d.png' % self._screenshot_indexs
+            print(self._screenshot_indexs)
         else:
             filename = filename.replace('/', os.sep)
-        logdir = self._get_log_dir()
+        logdir = log._get_log_dir()
         path = os.path.join(logdir, filename)
         link = robot.utils.get_link_path(path, logdir)
         return path, link

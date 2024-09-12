@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from TineAutomationToolkit.keywords import *
 
-
 class TineAutomationToolkit(
     ToolkitsTest,
     WaitingElement,
@@ -16,7 +15,8 @@ class TineAutomationToolkit(
     ):
 
     def __init__(self):
-        pass
+        self._screenshot_indexs = 0
+        self._status_mode = 'FLUTTER'
 
     def main(self):
         print("This Main นี้คือ เมน")
