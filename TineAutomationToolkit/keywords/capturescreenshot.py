@@ -5,14 +5,16 @@ import robot
 
 from .connectionmanagement import ConnectionManagement
 from AppiumLibrary.keywords._logging import _LoggingKeywords
+from AppiumFlutterLibrary.keywords._screen import _ScreenKeywords
 
 cache_app = ConnectionManagement()
 log = _LoggingKeywords()
+screen_instance = _ScreenKeywords()
 
 class CaptureScreenShot:
 
     def __init__(self):
-        pass
+        self._screenshot_index = 0
     
     #KeyWord
 
@@ -44,31 +46,55 @@ class CaptureScreenShot:
 
         |t_capture_page_screenshot | None |
 
-
+        แก้กลับเป็น ver 1.4 ก่อน เพราะต้องใช้รูปใน line noti
         """
-        if filename:
-            path, link = self._get_screenshot_paths(filename)
+        path, link = self._get_screenshot_paths(filename)
 
-            if hasattr(cache_app._current_application(), 'get_screenshot_as_file'):
-                cache_app._current_application().get_screenshot_as_file(path)
-            else:
-                cache_app._current_application().save_screenshot(path)
-
-            # Image is shown on its own row and thus prev row is closed on purpose
-            log._html('</td></tr><tr><td colspan="3"><a href="%s">'
-                       '<img src="%s" width="800px"></a>' % (link, link))
-            return path
+        if hasattr(cache_app._current_application(), 'get_screenshot_as_file'):
+            cache_app._current_application().get_screenshot_as_file(path)
         else:
-            base64_screenshot = cache_app._current_application().get_screenshot_as_base64()
-            log._html('</td></tr><tr><td colspan="3">'
-                       '<img src="data:image/png;base64, %s" width="800px">' % base64_screenshot)
-            return None
+            cache_app._current_application().save_screenshot(path)
+
+        # Image is shown on its own row and thus prev row is closed on purpose
+        log._html('</td></tr><tr><td colspan="3"><a href="%s">'
+                   '<img src="%s" width="800px"></a>' % (link, link))
+        return path
+
+        #แก้กลับเป็น ver 1.4 ก่อน เพราะต้องใช้รูปใน line noti
+        # if filename:
+        #     path, link = self._get_screenshot_paths(filename)
+
+        #     if hasattr(cache_app._current_application(), 'get_screenshot_as_file'):
+        #         cache_app._current_application().get_screenshot_as_file(path)
+        #     else:
+        #         cache_app._current_application().save_screenshot(path)
+
+        #     # Image is shown on its own row and thus prev row is closed on purpose
+        #     log._html('</td></tr><tr><td colspan="3"><a href="%s">'
+        #                '<img src="%s" width="800px"></a>' % (link, link))
+        #     return path
+        # else:
+        #     base64_screenshot = cache_app._current_application().get_screenshot_as_base64()
+        #     log._html('</td></tr><tr><td colspan="3">'
+        #                '<img src="data:image/png;base64, %s" width="800px">' % base64_screenshot)
+        #     return None
 
     #Private_Function
         
     def _get_screenshot_paths(self, filename):
-        filename = filename.replace('/', os.sep)
-        logdir = log._get_log_dir()
+        if not filename:
+            screenshot_index_value = getattr(screen_instance, '_screenshot_index', None)
+            print('getattr')
+            print(screenshot_index_value)
+            self._screenshot_index = screenshot_index_value+1
+            filename = 'appiumflutter-screenshot-%d.png' % self._screenshot_index
+            setattr(screen_instance, '_screenshot_index', self._screenshot_index)
+            print('setattr')
+            print(self._screenshot_index)
+        else:
+            filename = filename.replace('/', os.sep)
+        logdir = self._get_log_dir()
         path = os.path.join(logdir, filename)
         link = robot.utils.get_link_path(path, logdir)
         return path, link
+

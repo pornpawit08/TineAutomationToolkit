@@ -27,11 +27,11 @@ def isstr(s):
 class ControlElement:
 
     def __init__(self):
+        self._status_mode = 'FLUTTER'
          #เนื่องจากปัญหาเรื่องโครงสร้าง structure เลยยังไม่สามารถใช้ได้
         # self._element_finder_t = ElementFinder()
         # self._co = ConnectionManagement()
         # self._log = _LoggingKeywords()
-        pass
     #KeyWord
     
         #Switch_Mode
@@ -61,11 +61,20 @@ class ControlElement:
 
         if mode == 'NATIVE_APP':
             driver.switch_to.context('NATIVE_APP')
+            self._status_mode = 'NATIVE_APP'
             print("... Status Mode : Native_app")
         if mode == 'FLUTTER':
             driver.switch_to.context('FLUTTER')
+            self._status_mode = 'FLUTTER'
             print("... Status Mode : Flutter")
- 
+    
+    def native_get_mode(self):
+        """get เอาค่า mode หรือ conntext ปัจจุบันของหน้าแอปปัจจุบัน
+        """
+        log._info("Status Conntext Mode : '%s'." % self._status_mode)
+
+        return  self._status_mode
+    
     #NATIVE_APP
 
     def native_click_element(self,locator):
@@ -689,3 +698,7 @@ class ControlElement:
                 if self._flutter_check_widget_value_in_json(item, key, value):
                     return True
         return False
+    
+    def _getStatusModeConntext(self):
+        return  self._status_mode
+        
