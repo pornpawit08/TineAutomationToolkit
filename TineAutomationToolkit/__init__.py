@@ -11,7 +11,8 @@ class TineAutomationToolkit(
     KeyEvent,
     Touch,
     ConvertObject,
-    ImageProcessing
+    ImageProcessing,
+    Mongodbcrud
     ):
 
     def __init__(self):

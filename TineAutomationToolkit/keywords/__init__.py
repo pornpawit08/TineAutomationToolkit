@@ -10,5 +10,6 @@ from TineAutomationToolkit.keywords.keyevent import KeyEvent
 from TineAutomationToolkit.keywords.touch import Touch
 from TineAutomationToolkit.keywords.convertobject import ConvertObject
 from TineAutomationToolkit.keywords.imageprocessing import ImageProcessing
+from TineAutomationToolkit.keywords.mongodbcrud import Mongodbcrud
 
-__all__ = ['ToolkitsTest' , 'ConnectionManagement', 'WaitingElement', 'ControlElement','Scroll','CaptureScreenShot','KeyEvent','Touch','ConvertObject','ImageProcessing']
+__all__ = ['ToolkitsTest' , 'ConnectionManagement', 'WaitingElement', 'ControlElement','Scroll','CaptureScreenShot','KeyEvent','Touch','ConvertObject','ImageProcessing','Mongodbcrud']
