@@ -94,6 +94,8 @@ class Mongodbcrud:
         except Exception as e:
             logging.info("Fail Can't Convert string to ObjectId: %s" % (e))
 
+        return  object_id
+
     def mongodb_update_timestamp_object_id(self):
         """ *******Keyword update timestamp object id*******
 
