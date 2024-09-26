@@ -3,6 +3,7 @@ import datetime
 import time
 import random
 import logging
+import ast
 
 from bson import ObjectId
 from pymongo import MongoClient , errors
@@ -65,11 +66,26 @@ class Mongodbcrud:
         db = self._dbconnection['%s' % (dbname)]
         collection = db['%s' % (dbcollection)]
         #Set Update
+        dictquery = ast.literal_eval(query)
+        dictupdate = ast.literal_eval(update)
+
+        if '_id' in dictquery:
+            dictquery['_id'] = ObjectId(dictquery['_id'])
+
+        if 'ts' in dictquery:
+            dictquery['ts'] = ObjectId(dictquery['ts'])
+
+        if '$set' in dictupdate and 'ts' in dictupdate['$set']:
+            dictupdate['$set']['ts'] = ObjectId(dictupdate['$set']['ts'])
+
+        logging.info("dictquery : %s And Type : %s)" % (dictquery,type(dictquery)))
+        logging.info("dictupdate : %s And Type : %s)" % (dictupdate,type(dictupdate)))
+
         try:
             #  MongoClient เชื่อมต่อกับ MongoDB และ Update one
             result = collection.update_one(
-                query,
-                update
+                dictquery,
+                dictupdate
             )
             logging.info("Update one to Mongodb Success")
         except errors.ConnectionFailure as e:
